@@ -1,0 +1,135 @@
+\section{The Laplace Equation}
+We already encountered Laplace equation $\Delta^2\phi=0$ several times.
+It has very wide applications in mathematical physics, applied mathematics and pure mathematics.
+In physics, it often describes some physical systems (e.g. heat flow) that is in stationary state as it does not depend on time.
+We can also see this (possibly with a forcing term) in potential theory.
+For example, Laplace used it to describe gravitational systems.
+It also appears in the study of incompressible fluid flow.\\
+We often want to solve Laplace's equation in a domain $D$ subject to boundary conditions.
+The most common ones are the dirichlet conditions where we are given the value of $\phi$ on $\partial D$ and the Neumann conditions where we specify $\underline{\hat{n}}\cdot\nabla\phi$ on $\partial D$.
+\subsection{3D Cartesian Coordinates}
+In 3D Cartesian coordinates, the equation becomes
+$$\frac{\partial^2\phi}{\partial x^2}+\frac{\partial^2\phi}{\partial y^2}+\frac{\partial^2\phi}{\partial z^2}=0$$
+The seperation of variables $\phi(x,y,z)=X(x)Y(y)Z(z)$ gives the systems
+$$X^{\prime\prime}=-\lambda_lX,Y^{\prime\prime}=-\lambda_mY,Z^{\prime\prime}=-\lambda_nZ=(\lambda_l+\lambda_m)Z$$
+where $\lambda_l,\lambda_m$ are seperation constants.
+Therefore the general solution arising from this way is
+$$\phi(x,y,z)=\sum_{l,m,n}a_{l,m,n}X_l(x)Y_m(y)Z_n(z)$$
+\begin{example}[Steady Heat Conduction]
+    Consider a semi-infinite rectangular bar $[0,a]\times [0,b]\times [0,\infty]$ as the domain with boundary conditions $\phi=0$ at $x=0,a$ and $y=0,b$, $\phi=1$ at $z=0$ and $\phi\to 0$ as $z\to\infty$.
+    We shall try to find the eigenmodes.
+    For $X^{\prime\prime}=-\lambda_lX$ with $X(0)=X(a)=0$ we get $\lambda_l=l^2\pi^2/a^2$ and $X_l(x)=\sin(l\pi x/a)$ for $l=1,2,3,\ldots$.
+    For $Y^{\prime\prime}=-\lambda_mY$ we have $\lambda_m=m^2\pi^2/b^2$ and $Y_m(y)=\sin(m\pi y/b)$ again for $m=1,2,3,\ldots$.
+    For $Z$, the equation would be
+    $$Z^{\prime\prime}=-\lambda_nZ=(\lambda_l+\lambda_m)Z=\pi^2\left( \frac{l^2}{a^2}+\frac{m^2}{b^2} \right)Z$$
+    which has exponential solutions.
+    But $Z$ is bounded at infinity, therefore necessarily
+    $$Z_n=Z_{l,m}=\exp\left( -\sqrt{\frac{l^2}{a^2}+\frac{m^2}{b^2}}\pi z \right)$$
+    which gives the general solution
+    $$\phi(x,y,z)=\sum_{l,m}a_{l,m}\sin\frac{l\pi x}{a}\sin\frac{m\pi y}{b}\exp\left( -\sqrt{\frac{l^2}{a^2}+\frac{m^2}{b^2}}\pi z \right)$$
+    Now the condition $\phi(x,y,0)=1$ gives
+    $$a_{l,m}=\frac{2}{b}\int_0^b\frac{2}{a}\int_0^a\sin\frac{l\pi x}{a}\sin\frac{m\pi y}{b}\,\mathrm dx\mathrm dy=\frac{16}{\pi^2lm}$$
+    for odd $l,m$ and $0$ if any of them is even.
+    Therefore the heat flow solution is
+    $$\phi(x,y,z)=\sum_{l,m\text{ odd}}\frac{16}{\pi^2lm}\sin\frac{l\pi x}{a}\sin\frac{m\pi y}{b}\exp\left( -\sqrt{\frac{l^2}{a^2}+\frac{m^2}{b^2}}\pi z \right)$$
+    This may look complicated, and yes it is complicated.
+    However, for large $l,m$ (and large $z$), the exponential term would be very much close to $0$.
+    This allows us to get a very nice approximation by considering just lower order terms.
+\end{example}
+\subsection{2D Plane Polar Coordinates}
+In plane polar, Laplace's equation translates to
+$$0=\nabla^2\phi=\frac{1}{r}\frac{\partial}{\partial r}\left( r\frac{\partial\phi}{\partial r} \right)+\frac{1}{r^2}\frac{\partial^2\phi}{\partial\theta^2}$$
+Again we do a seperation of variables $\phi(r,\theta)=R(r)\Theta(\theta)$ to get
+$$\begin{cases}
+    \Theta^{\prime\prime}+\mu\Theta=0\\
+    r(rR^\prime)^\prime-\mu R=0
+\end{cases}$$
+where $\mu$ is the seperation constant.
+Assuming periodic boundary conditions, then the polar equation yields $\mu=m^2$ and $\Theta_m(\theta)$ is a superposition of $\cos(m\theta)$ and $\sin(m\theta)$.
+So the radial equation becomes $r(rR^\prime)^\prime-m^2R=0$.
+For $m\neq 0$, trying $R=\alpha r^\beta$ shows that $\beta=\pm m$ works, so $R_m$ is composed of $r^m$ and $r^{-m}$.
+If $m=0$, $R_0$ is a linear combination of constant and $\log r$ by just integrating.
+So the general solution is just
+\begin{align*}
+    \phi(r,\theta)&=\frac{a_0}{2}+c_0\log r\\
+    &\quad+\sum_{m=1}^\infty(a_m\cos(m\theta)+b_n\sin(m\theta))r^m\\
+    &\quad+\sum_{m=1}^\infty(c_m\cos(m\theta)+d_m\sin(m\theta))r^{-m}
+\end{align*}
+For constants $a_m,b_m,c_m,d_m$.
+\begin{example}[Soap Film on a Unit Disk]
+    We want to solve Laplace's equation on the unit disk, where the boundary condition is given a distorted circular wire $\phi(1,\theta)=f(\theta)$.
+    Of course we want our solution to be continuous in the inside of the disk, in particular at $0$, therefore $c_m=d_m=0$ for all $m$.
+    Therefore we just got
+    $$\phi(r,\theta)=\frac{a_0}{2}+\sum_{m=1}^\infty(a_m\cos(m\theta)+b_m\sin(m\theta))r^m$$
+    left.
+    But then $f(\theta)=\phi(1,\theta)$ gives a Fourier series (again!), so
+    $$a_m=\frac{1}{\pi}\int_0^{2\pi}f(\theta)\cos(m\theta)\,\mathrm d\theta,b_m=\frac{1}{\pi}\int_0^{2\pi}f(\theta)\sin(m\theta)\,\mathrm d\theta$$
+    For a nontrivial distortion, the term $r^m$ then tells us that the high harmonics are concentrated near the edge of the wire.
+\end{example}
+\subsection{3D Cylindrical Polar Coordinates}
+Here Laplace's equation become
+$$0=\nabla^2\phi=\frac{1}{r}\frac{\partial}{\partial r}\left( r\frac{\partial\phi}{\partial r} \right)+\frac{1}{r^2}\frac{\partial^2\phi}{\partial\theta^2}+\frac{\partial^2\phi}{\partial z^2}$$
+Seperation of variables $\phi(r,\theta,z)=R(r)\Theta(\theta)Z(z)$ gives
+$$\begin{cases}
+    \Theta^{\prime\prime}=-\mu\Theta\\
+    Z^{\prime\prime}=\lambda Z\\
+    r(rR^\prime)^\prime+(\lambda r^2-\mu)R=0
+\end{cases}$$
+where $\mu,\lambda$ are the seperation constants.
+For the polar equation, periodic boundary conditions give $\mu_m=m^2$ and $\Theta_m(\theta)$ is a superposition of $\sin(m\theta)$ and $\cos(m\theta)$.
+The radial equation is Bessel's equation (surprise?) with eigenfunctions $R_{mn}=J_m(j_{mn}r/a)$ under boundary condition $R(a)=0$ and the requirement of it not being singular (so we can exclude the Neumann functions).
+The $Z$ equation then becomes $Z^{\prime\prime}=kZ$ where $k=j_{mn}/a$ which gives $Z=e^{-kz}$ (the $e^{kz}$ solution is eliminated by the boundary condition $Z\to 0$ as $z\to\infty$).
+So the general solution is
+$$\phi(r,\theta,z)=\sum_{m=0}^\infty\sum_{n=1}^\infty(a_{mn}\cos(m\theta)+b_{mn}\sin(m\theta))J_m(j_{mn}r/a)\exp(-j_{mn}r/a)$$
+\begin{example}
+    The boundary condition $\phi=0$ at $r=a$, $\phi=T_0$ at $z=0$ and $\phi\to 0$ as $z\to\infty$ gives the solution
+    $$\phi(r,\theta,z)=\sum_{n=1}^\infty\frac{2T_0}{j_{0n}J_1(j_{0n})}J_0(j_{0n}r/a)\exp(-j_{0n}z/a)$$
+\end{example}
+\subsection{3D Spherical Polar Coordinates}
+Recall that the spherical polar coordinate transforms from Cartesian coordinates by
+$$x=r\sin\theta\cos\phi,y=r\sin\theta\sin\phi,z=r\cos\theta$$
+for $r\in\mathbb R_{\ge 0},\theta\in [0,\pi],\phi\in[0,2\pi]$ where we have $\mathrm dV=r^2\sin\theta\,\mathrm dr\mathrm d\theta\mathrm d\phi$.
+Laplace's equation transforms into
+$$0=\nabla^2\Phi=\frac{1}{r^2}\frac{\partial}{\partial r}\left( r^2\frac{\partial\Phi}{\partial r} \right)+\frac{1}{r^2\sin\theta}\frac{\partial}{\partial\theta}\left( \sin\theta\frac{\partial\Phi}{\partial\theta} \right)+\frac{1}{r^2\sin^2\theta}\frac{\partial^2\Phi}{\partial\phi^2}$$
+We only consider the axis-symmetric case where $\partial\Phi/\partial\phi=0$.
+Again seperate the variables $\Phi(r,\theta,\phi)=R(r)\Theta(\theta)$ gives
+$$\begin{cases}
+    ((\sin\theta)\Theta^\prime)^\prime+\lambda(\sin\theta)\Theta=0\\
+    (r^2R^\prime)^\prime-\lambda R=0
+\end{cases}$$
+where $\lambda$ is the seperation constant.
+The substitution $x=\cos\theta$ transforms the polar equation into
+$$\frac{\mathrm d}{\mathrm dx}\left( (1-x^2)\frac{\mathrm d\Theta}{\mathrm dx} \right)+\lambda\Theta=0$$
+which is exactly Legendre's equation.
+So we obtain the eigenvalues $\lambda_l=l(l+1)$ with eigenfunctions $\Theta_l(\theta)=P_l(x)=P_l(\cos\theta)$ where $P_l$ is the $l^{th}$ Legendre polynomial.
+Putting it into the radial equation gives $(r^2R^\prime)^\prime-l(l+1)R=0$, which gives (by educated guess) the solution $R_l$ being a superposition of $r^l$ and $r^{-l-1}$.
+The general axis-symmetric solution is then
+$$\Phi=\sum_{l=0}^\infty(a_lr^l+b_lr^{-l-1})P_l(\cos\theta)$$
+where $a_l,b_l$ can be determined by boundary conditions.
+\begin{example}
+    Consider the boundary condition $\Phi(1,\theta,\phi)=f(\theta)$ for some $f$.
+    Regularity implies $b_l=0$ for any $l$.
+    So we have
+    $$f(\theta)=\sum_{l=0}^\infty a_lP_l(\cos\theta)\implies F(x)=\sum_{l=0}^\infty a_lP_l(x)$$
+    with $f(\theta)=F(\cos\theta)$.
+    This gives
+    $$a_l=\frac{2l+1}{2}\int_{-1}^1F(x)P_l(x)\,\mathrm dx$$
+    in the special case where $f(\theta)=\sin^2\theta$ we have $\Phi=2(1-P_2(\cos\theta)r^2)/3$.
+\end{example}
+Consider a charge on $z$-axis at $\underline{r}_0=(0,0,1)$ and the potential at $P$ is defined by
+$$\Phi(\underline{r})=\frac{1}{|\underline{r}-\underline{r}_0|}=\frac{1}{\sqrt{r^2-2r\cos\theta+1}}=\frac{1}{\sqrt{r^2-2rx+1}}$$
+where $x=\cos\theta$.
+It is easy to see that $\Phi$ satisfies $\nabla^2\Phi=0$ in $\mathbb R^3\setminus\{\underline{r}_0\}$.
+Therefore there is some $a_l$ such that
+$$\frac{1}{\sqrt{r^2-2rx+1}}=\sum_{l=0}^\infty a_lP_l(x)r^l$$
+We have $P_l(1)=1$ at $x=1$, therefore plugging in $x=1$ gives $a_l=1$ for any $l$, therefore
+$$\frac{1}{\sqrt{r^2-2rx+1}}=\sum_{l=0}^\infty P_l(x)r^l$$
+is the generating function of the Legendre polynomials.
+\begin{example}[Electric Multipoles]
+    Consider the case where we put charges along $z$-axis at $z=\pm a,0$ viewed from a large distance $r>>a$ with $\Phi\to 0$ as $r\to\infty$.
+    Therefore $a_n=0$ for all $n$.
+    When $l=0$, we just get a point charge and thus $\Phi\propto 1/r$
+    This is called the monopole field of the point charge $q$.
+    When $l=1$, we get the dipole (i.e. opposite charges sitting opposite each other) $\Phi\propto(\cos\theta)/r^2$ for two opposite charges.
+    When $l=2$, it is like putting a charge $2q$ at the origin and $-q$ at opposite position across the origin, in which case $\Phi\propto(3\cos^2\theta-1)/(2r^3)$ gives the quadruple field.
+\end{example}

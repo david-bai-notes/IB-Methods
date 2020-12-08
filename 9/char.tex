@@ -1,0 +1,119 @@
+\section{Characteristics}
+\subsection{Well-Posed Cauchy Problems}
+Solving PDEs depends on the equation and the boundary/initial data.
+A Cauchy problem is a PDF together with auxiliary data specified on a surface in 3D or a curve in 2D (known as the Cauchy data).
+\begin{definition}
+    A Cauchy problem is well-posed if:\\
+    1. A solution exists.\\
+    2. The solution is unique.\\
+    3. The solution depends continuously on the auxiliary data.
+\end{definition}
+\subsection{Method of Characteristics}
+Suppose we have a curve $C$ parameterised by $(x(s),y(s))$ in space and a tangent $v=(x^\prime(s),y^\prime(s))$ to the curve at some point $P$.
+For a function $\phi(x,y)$, we can define a directional derivative
+$$\left.\frac{\mathrm d\phi}{\mathrm ds}\right|_C=x^\prime(s)\frac{\partial\phi}{\partial x}+y^\prime(s)\frac{\partial\phi}{\partial y}=v\cdot \nabla\phi|_C$$
+If $v\cdot\nabla\phi=0$, then $\mathrm d\phi/\mathrm ds=0$ and $\phi$ is constant along $C$.
+Now suppose we have a vector field $u=(\alpha(x,y),\beta(x,y))$ with its family of integral curves (i.e. curves which tangent to the field at any point) non-intersecting and filling $\mathbb R^2$.
+Now find a curve $B$ by $(x(t),y(t))$ tranverse to $u$ such that its tangent vector $w=(x^\prime(t),y^\prime(t))$ is never parallel to $u$.
+Label each integral curve $C$ of $u$ using $t$ at the intersection point with $B$ and then use $s$ to parameterise along the curve (i.e. take $s=0$ at $B$).
+Our integral curves then satisfy $x^\prime(s)=\alpha(x,y),y^\prime(s)=\beta(x,y)$, solving which gives a family of characteristic curves along whcih $t$ remains constant.
+In some sense, we are creating a new coordinate $(s,t)$ at which the PDE is in a nice form.
+\subsection{Characteristics of a First-Order PDE}
+Consider the first-order PDE
+$$\alpha(x,y)\frac{\partial\phi}{\partial x}+\beta(x,y)\frac{\partial\phi}{\partial y}=0$$
+with specified Cauchy data on an initial curve $B$ parameterised by $(x(t),y(t))$.
+Note that we immediately have $\alpha\phi_x+\beta\phi_y=u\cdot\nabla\phi=\phi^\prime(s)|_C$ where $C$ is an integral curve of $u=(\alpha,\beta)$.
+These are called characteristic curves of the PDE.
+The PDE then gives $\phi^\prime(s)=\alpha\phi_x+\beta\phi_y=0$, therefore $\phi$ is constant along the curve $C$.
+Therefore the Cauchy data $f(t)$ defined on (sufficiently nice) $B$ at $s=0$ will be propagated constantly along $C$ to give the solution $\phi(s,t)=\phi(x(s,t),y(s,t))=f(t)$.
+To get $\phi$, simply invert $s=s(x,y),t=t(x,y)$ (provided it has nonzero Jacobian) and we have $\phi(x,y)=f(t(x,y))$.
+\begin{example}
+    1. Consider the simple ODE $\partial\phi/\partial x=0$ with $\phi(0,y)=h(y)$ given on the $y$-axis.
+    The family of curves we want are the integral curves $x^\prime(s)=\alpha=1,y^\prime(s)=\beta=0$.
+    The $y$ axis is parameterised as $(x(t),y(t))=(0,t)$.
+    Therefore at $s=0$ we need $(x,y)=(0,t)$, hence the family of curves $C$ are characterised as $x=s,y=t$ (simple indeed).
+    Therefore $\phi(s,t)=h(t)$, and by inversion $\phi(x,y)=h(t)$.\\
+    2. Let's do some example that are a bit less simple.
+    We turn our attention to $e^x\phi_x+\phi_y=0$ with $\phi(x,0)=\cosh x$.
+    The characteristic equation is $x^\prime(s)=e^x,y^\prime(s)=1$.
+    The initial curve is parameterised as $x(t)=t,y(t)=0$ which shall apply when $s=0$.
+    Solving these gives $e^{-x}=e^{-t}-s,y=s$.
+    $\phi^\prime(s)=0$ gives $\phi(s,t)=\cosh t$.
+    The inversion gives $s=y,t=-\log(y+e^{-x})$, so $\phi(x,y)=\cosh(-\log(y+e^{-x}))$.
+\end{example}
+So the homogeneous case is easy enough.
+How about inhomogeneous ones?
+Of course we can do the good old "guess and superposition" manoeuvre, but we can do better.\\
+We want to solve $\alpha(x,y)\phi_x+\beta(x,y)\phi_y=\gamma(x,y)$ with specified Cauchy data $\phi(x(t),y(t))=f(t)$ on a curve $B$.
+The characteristic curves $C$ satisfy the same system as usual, but there is a twist:
+$\phi^\prime(s)|_C=u\cdot\nabla\phi=\gamma(x,y)$ instead of $0$.
+So $f(t)$ is no longer propagating constantly and we must actually solve the ODE.
+\begin{example}
+    Consider $\phi_x+2\phi_y=ye^x$ with $\phi=\sin x$ along $y=x$.
+    The characteristic equations are $x^\prime(s)=1,y^\prime(s)=2$.
+    On $y=x$, we parameterise $(x(t),y(t))=(t,t)$, which then gives $x=s+t,y=2s+t$.
+    Now we turn to $\phi^\prime(s)=\gamma=ye^x=(2s+t)e^{s+t}$ subject to $\phi=\sin t$ at $s=0$.
+    By simple integration we obtain $\phi=(2s-2+t)e^{s+t}+C$ where $C$ is constant in $s$.
+    The initial conditions then gives $\phi(s,t)=(2s-2+t)e^{s+t}+\sin t+(2-t)e^t$.
+    With inversion $s=y-x,t=2x-y$ gives
+    $$\phi(x,y)=(y-2)e^x+(y-2x+2)e^{2x-y}+\sin(2x-y)$$
+\end{example}
+\subsection{Classification of Second-Order Linear PDEs}
+In $\mathbb R^2$, the general homogeneous second order linear PDE has the form
+$$0=\mathcal L\phi=a\frac{\partial^2\phi}{\partial x^2}+2b\frac{\partial^2\phi}{\partial x\partial y}+c\frac{\partial^2\phi}{\partial y^2}+d\frac{\partial\phi}{\partial x}+e\frac{\partial\phi}{\partial y}+f\phi$$
+The principal part of this ODE is defined as
+$$\sigma_p(x,y,k_x,k_y)=k^\top Ak=\begin{pmatrix}
+    k_x&k_y
+\end{pmatrix}\begin{pmatrix}
+    a(x,y)&b(x,y)\\
+    b(x,y)&c(x,y)
+\end{pmatrix}\begin{pmatrix}
+    k_x\\
+    k_y
+\end{pmatrix}$$
+The PDEs are classified by the properties of the eigenvalues of $A$.
+If $b^2-ac<0$, then the eigenvalues have the same sign, so the equation is elliptic.
+If $b^2-ac>0$, then the eignevalues have different signs and the equation is called hyperbolic.
+If $b^2-ac=0$, then some eigenvalue is $0$, and the equation is called parabolic.
+\begin{example}
+    The wave equation is hyperbolic.
+    The heat equation is parabolic.
+    The Laplace equation is elliptic.
+\end{example}
+A curve defined by $f(x,y)$ being constant is a characteristic curve for this second order PDE if $(\nabla f)A(\nabla f)^\top =0$.
+If the curve can be written as $y=y(x)$, then $f_x/f_y=\mathrm dy/\mathrm dx$, so a substitution gives $a(y^\prime)^2-2by^\prime+c=0$ and hence $y^\prime(x)=(b\pm\sqrt{b^2-ac})/a$.
+Therefore this classification makes sense as the sign of $b^2-ac$ determines the behaviour of characteristics.
+If the equation is hyperbolic, then $b^2-ac>0$ which gives two distinct solutions;
+if it is parabolic, then we get exactly one solution;
+but if it is elliptic, then there is simply no (real) characteristic curves in this form.\\
+If we can transform these to characteristic coordinates $(u,v)$, the PDE will take the canonical form
+$$0=\frac{\partial^2\phi}{\partial u\partial v}+\text{lower order terms}$$
+\begin{example}
+    Consider $-y\phi_{xx}+\phi_{yy}=0$ which is hyperbolic for $y>0$, elliptic for $y<0$ and parabolic for $y=0$.
+    We are interested in the hyperbolic $y>0$ case.
+    Then $\mathrm dy/\mathrm dx=\pm y^{-1/2}$ by quadratic formula.
+    Integrating gives $(2/3)y^{3/2}\pm x=C_\pm$, $C_\pm$ constants.
+    The characteristic coordinates are then set as $u=(2/3)y^{3/2}+ x,v=(2/3)y^{3/2}- x$.
+    After a lot of calculations using chain rule, the equation can be transformed into
+    $$\phi_{uv}+\frac{1}{6(u+v)}(\phi_u+\phi_v)=0$$
+\end{example}
+\subsection{General Solution for Wave Equation}
+Going back to our old friend
+$$\frac{1}{c^2}\frac{\partial^2\phi}{\partial t^2}-\frac{\partial^2\phi}{\partial x^2}=0$$
+with initial conditions $\phi(x,0)=f(x),\phi_t(x,0)=g(x)$.
+Then the characteristic equation is $\mathrm dx/\mathrm dt=\pm C$, $C$ constant.
+Therefore we can do the change of coordinate $u=x-ct,v=x+ct$ which just gives
+$$\frac{\partial^2\phi}{\partial u\partial v}=0\implies \phi=G(u)+H(v)=G(x-ct)+H(x+ct)$$
+For differentiable $G,H$.
+The initial conditions then give the eqautions
+$$\begin{cases}
+    f(x)=\phi(x,0)=G(x)+H(x)\\
+    g(x)=\phi_t(x,0)=-cG^\prime(x)+cH^\prime(x)
+\end{cases}$$
+Combining them gives
+$$H(x)=\frac{1}{2}(f(x)-f(0))+\frac{1}{2c}\int_0^xg(y)\,\mathrm dy,G(x)=\frac{1}{2}(f(x)+f(0))-\frac{1}{2c}\int_0^xg(y)\,\mathrm dy$$
+So
+$$\phi(x,t)=\frac{f(x-ct)+f(x+ct)}{2}+\frac{1}{2c}\int_{x-ct}^{x+ct}g(y)\,\mathrm dy$$
+This means that the wave propagates at $v=c$ and $\phi$ is fully determined by the values of $f,g$ (which is the initial data at $t=0$) in the interval $[x-ct,x+ct]$.
+This can be interpreted as the light cone, which gives the causal structure of relativity.
+That is, data at $x=x_0$ only influence $[x_0-ct,x_0+ct]$ after time $t$.

@@ -1,0 +1,227 @@
+\section{The Wave Equation}
+\subsection{Waves on an Elastic String}
+Consider small displacements $y(x,t)$ on a stretched string with fixed ends at $x=0$ and $x=L$, that is with boundary conditions $y(0,t)=y(L,t)=0$.
+We want to determine the string's motion subject to initial conditions
+$$y(x,0)=p(x),\frac{\partial y}{\partial t}(x,0)=q(x)$$
+We want to derive its equation of motion.
+We try to obtain a differential equation by balancing the forces on string segment $x,x+\delta x$ and taking $\delta x\to 0$.
+By resolving in $x$ direction we get that the tension $T$ on the string is independent of $x$.
+By resolving in $y$ direction we arrive at
+$$(\mu\delta x)\frac{\partial^2y}{\partial t^2}=T\frac{\partial^2y}{\partial x^2}\delta x-g\mu\delta x$$
+where $\mu$ is the mass per unit length (aka linear mass density).
+Write $c=\sqrt{T/\mu}$ the wave speed and assume the acceleration due to gravity is negligible, then this equation is just
+$$\frac{1}{c^2}\frac{\partial^2y}{\partial t^2}=\frac{\partial^2y}{\partial x^2}$$
+which is called the one-dimensional wave equation.
+\subsection{Seperation of Variables}
+Our first attempt at a solution is to guess a solution of seperable form, that is $y(x,t)=X(x)T(t)$, then substitution gives
+$$\frac{1}{c^2}X\ddot{T}=X^{\prime\prime}T\implies \frac{1}{c^2}\frac{\ddot{T}}{T}=\frac{X^{\prime\prime}}{X}$$
+The left hand side depends only on $t$ and the right hand side depends only on $x$, so they can only equal if both sides equal a constant $-\lambda$ (called the seperation constant), then we get
+$$\begin{cases}
+    X^{\prime\prime}+\lambda X=0\\
+    \ddot{T}+\lambda c^2T=0
+\end{cases}$$
+Such nice things don't always happen, but we are glad it happened in this particular case.
+\footnote{Whether we can do it depends on the existence of symmetry in the boundary conditions, which is probably not going to be discussed here.}
+So we reduced a PDE to two independent ODEs, which we know how to solve.
+\subsection{Boundary Conditions and Normal Modes}
+There are a few possibilities depending on the sign of $\lambda$.\\
+If $\lambda<0$, then taking $\chi^2=-\lambda$ gives the general solution
+$$X(x)=Ae^{\chi x}+Be^{-\chi x}=\tilde{A}\cosh(\chi x)+\tilde{B}\sinh(\chi x)$$
+where $A,B,\tilde{A},\tilde{B}$ are constants.
+But the boundary conditions $X(0)=X(L)=0$ would yield $X=0$ everywhere, so this is just the trivial solution.\\
+Now if $\lambda=0$, then $X(x)=Ax+B$ where $A,B$ are constants, but again we must have $A=B=0$ as $X(0)=X(L)=0$.
+Trivial solution again.\\
+What is left is $\lambda>0$, so $X(x)=A\cos(\sqrt{\lambda}x)+B\sin(\sqrt{\lambda}x)$, then the boundary condition $X(0)=X(L)=0$ gives the family of solutions
+$$\lambda_n=\left( \frac{n\pi}{L} \right)^2,X_n(x)=B_n\sin\frac{n\pi x}{L}$$
+where $B_n$ are constants.
+It is not hard to observe that they are just our familiar Fourier eigenvalues and eigenfunctions.
+These are called the normal modes of the system since its spacial shape in $x$ does not change in time but the amplitudes may vary.
+\footnote{Well, duh!}
+The case $n=1$ is called the fundamental mode.
+A plot shows the modes are simply just the patterns of simple vibrations we expect.
+\subsection{Initial Conditions and Temporal Solutions}
+Substituting $\lambda_n=(n\pi/L)^2$ into the time ODE gives
+$$T_n(t)=C_n\cos\frac{n\pi ct}{L}+D_n\sin\frac{n\pi ct}{L}$$
+where $C_n,D_n$ are constants.
+So we obtain the family of solutions
+$$y_n(x,t)=T_n(t)X_n(x)=\left( C_n\cos\frac{n\pi ct}{L}+D_n\sin\frac{n\pi ct}{L} \right)\sin\frac{n\pi x}{L}$$
+As the system we are trying to deal with is homogeneous and linear, we have the superposition principle, so the general solution is
+$$y(x,t)=\sum_{n=1}^\infty\left( C_n\cos\frac{n\pi ct}{L}+D_n\sin\frac{n\pi ct}{L} \right)\sin\frac{n\pi x}{L}$$
+assuming it converges sufficiently well.
+This satisfies the boundary conditions as $X_n$ does.
+Substituting into the initial condition, we get
+$$p(x)=\sum_{n=1}^\infty C_n\sin\frac{n\pi x}{L},q(x)=\sum_{n=1}^\infty\frac{n\pi c}{L}D_n\sin\frac{n\pi x}{L}$$
+which allows us to find $C_n,D_n$ by expanding $p,q$ as Fourier sine series.
+In particular,
+$$C_n=\frac{2}{L}\int_0^Lp(x)\sin\frac{n\pi x}{L}\,\mathrm dx,D_n=\frac{2}{n\pi c}\int_0^Lq(x)\sin\frac{n\pi x}{L}\,\mathrm dx$$
+This is possible (well, assuming everything), so we have found a particular solution to the system.
+\begin{example}
+    We pluck string at $x=\xi$, which requires
+    $$y(x,0)=p(x)=\begin{cases}
+        x(1-\xi)\text{, for $0\le x\le \xi$}\\
+        \xi(1-x)\text{, for $\xi\le x\le 1$}
+    \end{cases},\frac{\partial y}{\partial t}(x,0)=q(x)=0$$
+    Then with our formulas we obtain
+    $$C_n=\frac{2\sin(n\pi\xi)}{(n\pi)^2},D_n=0\implies y(x,t)=\sum_{n=1}^\infty\frac{2}{(n\pi)^2}\sin(n\pi\xi)\sin(n\pi x)\cos(n\pi ct)$$
+    Of course, this case happens to be the way of making sound on a string instrument, where guitar has $\xi\in [1/4,1/3]$ and violin has $\xi\approx 1/7$.
+\end{example}
+By the usual trigonometric identities, the general solution we found earlier becomes $y(x,t)=f(x-ct)+g(x+ct)$ where
+$$f(x-ct)=\frac{1}{2}\sum_{n=1}^\infty\left(C_n\sin\frac{n\pi(x-ct)}{L}+D_n\cos\frac{n\pi(x-ct)}{L}\right)$$
+and
+$$g(x+ct)=\frac{1}{2}\sum_{n=1}^\infty\left(C_n\sin\frac{n\pi(x+ct)}{L}-D_n\cos\frac{n\pi(x+ct)}{L}\right)$$
+So the standing wave solution can be interpreted as a superposition of a right-moving wave (along $x-ct=\eta$, $\eta$ constant) and a left-moving wave (along $x+ct=\xi$, $\xi$ constant).
+We can generalise this idea later.
+\begin{example}
+    In the special case where $q=0$, we have $f=g=p/2$, so
+    $$y(x,t)=\frac{p(x-ct)+p(x+ct)}{2}$$
+\end{example}
+\subsection{Oscillation Energy}
+A vibrating string has kinetic energy due to the motion of the particles in the string.
+This is given by $mv^2/2$.
+So the total kinetic energy on the string would be the integral
+$$\operatorname{KE}=\frac{1}{2}\int_0^L\left(\frac{\partial y}{\partial t}\right)^2\mu\,\mathrm dx$$
+where $\mu$ is the mass per unit length.
+The (elastic) potential energy due to streching $\Delta x$ is then
+$$\operatorname{PE}=T\int_0^L\left( \sqrt{1+\left( \frac{\partial y}{\partial x} \right)^2} -1\right)\,\mathrm dx\approx\frac{1}{2}T\int_0^L\left( \frac{\partial y}{\partial x} \right)^2\,\mathrm dx$$
+for small $|\partial y/\partial x|$.
+So the total summed energy of the string is then, via $c^2=T/\mu$,
+$$E=\frac{1}{2}\mu\int_0^L\left( \left( \frac{\partial y}{\partial t} \right)^2+c^2\left(\frac{\partial y}{\partial x}\right)^2 \right)\,\mathrm dx$$
+So by substituting our generalisation and using orthogonality,
+$$E=\frac{1}{2}\mu\sum_{n=1}^\infty (A_n+B_n)$$
+where
+$$A_n=\int_0^L \left( \frac{n\pi c}{L}C_n\sin\frac{n\pi ct}{L}+ \frac{n\pi c}{L}D_n\cos\frac{n\pi ct}{L}\right)^2\sin^2\frac{n\pi x}{L}\,\mathrm dx$$
+and
+$$B_n=\int_0^Lc^2\left( C_n\cos\frac{n\pi ct}{L}+ D_n\sin\frac{n\pi ct}{L}\right)^2\frac{n^2\pi^2}{L^2}\cos^2\frac{n\pi x}{L}\,\mathrm dx$$
+Simplifying this mess gives
+$$E=\frac{1}{4}\mu\sum_{n=1}^\infty\frac{n^2\pi^2c^2}{L}(C_n^2+D_n^2)$$
+which can be interpreted as the sum of the energy of all normal modes.
+Also, this is constant, so it is conserved in time.
+\subsection{Wave Reflection and Transmission}
+Recall the travelling wave solution along the $x\pm ct$ directions.
+We want to further develop this idea
+\begin{definition}
+    A simple harmonic travelling wave is defined as
+    $$t=\operatorname{Re}(Ae^{i\omega (t-x/c)})=|A|\cos(\omega(t-x/c)+\phi)$$
+    where $\phi=\arg A$ is the phase and $2\pi c/\omega$ is the wavelength.
+\end{definition}
+Sometimes we will just assume the $\operatorname{Re}$ is there without writing it out explicitly.\\
+Consider a density discontinuity on the string at $x=0$ with
+$$\mu=\begin{cases}
+    \mu_-\text{, for $x<0$}\implies c_-=\sqrt{T/\mu_-}\\
+    \mu_+\text{, for $x>0$}\implies c_+=\sqrt{T/\mu_+}
+\end{cases}$$
+So a wave $Ae^{i\omega (t-x/c_-)}$ approaching $0$ from left will break down to two parts:
+The reflected wave $Be^{i\omega (t+x/c_-)}$ and the transmitted wave $De^{i\omega (t-x/c_+)}$.
+The continuity condition on $y$ gives $A+B=D$ and by balancing the forces
+$$T\left.\frac{\partial y}{\partial x}\right|_{x=0_-}=T\left.\frac{\partial y}{\partial x}\right|_{x=0_+}$$
+(which is basically the continuity condition on $\partial y/\partial x$) it gives $2A=D(c_++c_-)/c_+$.
+Combining them all gives
+$$D=\frac{2c_+}{c_-+c_+},B=\frac{c_+-c_-}{c_-+c_+}A$$
+In general, it is possible to have different phase shifts $\phi$.\\
+Now, if $c_+=c_-$, then $D=A$ and $B=0$, so there is no reflection, which is intuitive.
+If we have the Dirichlet boundary conditions $\mu_+/\mu_-\to\infty$ (interpreted as a fixed end $y=0$ at $x=0$), then $c_+/c_-\to 0$, so $D=0$ and $B=-A$ where we get total reflection (with opposite phase $\phi=\pi$).
+This is also what is expected.
+If we have the Neumann boundary conditions $\mu_+/\mu_-\to 0$ (interpreted as an extremely light string in $x>0$), then $c_+/c_-\to\infty$, so $D=2A$ and $B=A$, so we get total reflection with same phase $\phi=0$.
+\subsection{Wave Equation in the Plane Polar Coordinates}
+The wave equation in two dimensions is
+$$\frac{1}{c^2}\frac{\partial^2u}{\partial t^2}=\nabla^2u$$
+Under plane polar coordinates $u=u(r,\theta,t)$, we impose the boundary condition $u(1,\theta,t)=0$ for any $\theta,t$ (interpreted as a fixed rim) and initial conditions
+$$u(r,\theta,0)=\phi(r,\theta),\frac{\partial u}{\partial t}(r,\theta,0)=\psi(r,\theta)$$
+We use seperation of variables again.
+If we substitute $u(r,\theta,t)=T(t)V(r,\theta)$, then we obtain the decoupled system
+$$\begin{cases}
+    \ddot{T}+\lambda c^2T=0\\
+    \nabla^2V+\lambda V=0
+\end{cases}$$
+where $\lambda$ is a seperation constant.
+Note that in plane polar,
+$$\nabla^2V=\frac{\partial^2V}{\partial r^2}+\frac{1}{r}\frac{\partial V}{\partial r}+\frac{1}{r^2}\frac{\partial^2V}{\partial\theta^2}+\lambda V=0$$
+We seperate the variables further by writing $V(r,\theta)=R(r)\Theta(\theta)$.
+This gives
+$$\begin{cases}
+    \Theta^{\prime\prime}+\mu\Theta=0\\
+    r^2R^{\prime\prime}+rR^\prime+(\lambda r^2-\mu)R=0
+\end{cases}$$
+where $\mu$ is again a seperation constant.
+Assuming $\mu>0$.
+Solving for $\Theta$ subject to $\Theta(0)=\Theta(\pi)$ gives our old friend
+$$\Theta_m(\theta)=A_m\cos(m\theta)+B_m\sin(m\theta),m\in\mathbb Z_{>0}$$
+with $\mu_m=m^2$.
+For $R$, we divide the equation by $r$ and transform it into Sturm-Liouville form
+$$\frac{\mathrm d}{\mathrm dr}(rR^\prime)-\frac{m^2}{r}=-\lambda rR$$
+Note that the boundary condition means we only care about $r\in[0,1]$.
+The boundary condition are self-adjoint, which is convenient.
+\subsection{Bessel's Equation}
+Substitute $z=\sqrt{\lambda}r$ gives
+$$z^2\frac{\mathrm d^2R}{\mathrm dz^2}+z\frac{\mathrm dR}{\mathrm dz}+(z^2-m^2)R=0\iff (zR^\prime)^\prime+\left( z-\frac{m^2}{z} \right)R=0$$
+Apparently $0$ is a regular singular point, so we substitute the power series
+$$R=z^p\sum_{n=0}^\infty a_nz^n$$
+which gives
+$$\sum_{n=0}^\infty (a_n(n+p)(n+p-1)z^{n+p}+(n+p)z^{n+p}+z^{n+p+2}+m^2z^{n+p})=0$$
+The indivial equation is then $p^2-m^2=0$, so $p=\pm m$.
+For $p=m$, it is called the regular solution (otherwise you get a singular point at $0$).
+Here we have the recurrence
+$$(n+m)^2a_n+a_{n-2}-m^2a_n=0\implies a_n=-\frac{1}{n(n+2m)}a_{n-2}$$
+This gives the even series with solutions
+$$a_{2n}=a_0\frac{(-1)^n}{2^{2n}n!(n+m)(n+m-1)\cdots (m+1)}$$
+Conveniently we set $a_0=1/(2^mm!)$ which gives the Bessel function
+$$J_m(z)=\left( \frac{z}{2} \right)^m\sum_{n=0}^\infty\frac{(-1)^n}{n!(n+m)!}\left( \frac{z}{2} \right)^{2n}$$
+Actually, if we set $y=\sqrt{z}R$, then we will obtain
+$$y^{\prime\prime}+y\left( 1+\frac{1}{4z}-\frac{m^2}{z^2} \right)=0$$
+which, as $z\to\infty$, gives the approximation $y^{\prime\prime}\approx -y$ which has (approximated) solutions $R\approx z^{-1/2}(A\cos z+B\sin z)$ for $A,B$ constants.\\
+Back to Bessel's function.
+In fact, when $m=\nu\notin\mathbb Z$, this power solution also works but replace $(n+m)!$ by $\Gamma(n+\nu+1)$.
+The second solution with $p=-m$ is known as the Neumann functions (or Bessel functions of second kind) which satisfies
+$$Y_m(z)=\lim_{\nu\to m}\frac{J_\nu(z)\cos(\nu\pi)-J_{-\nu}(z)}{\sin(\nu\pi)}$$
+As one can verify, there are a number of identities associated with Bessel functions, e.g. we have $(z^mJ_m(z))^\prime=z^mJ_{m-1}(z)$.
+This also implies
+$$\begin{cases}
+    J_m^\prime(z)+mJ_m(z)/z=J_{m-1}(z)\\
+    J_{m-1}(z)+J_{m+1}(z)=2mJ_m(z)/z\\
+    2J_m^\prime(z)=J_{m-1}(z)-J_{m+1}(z)
+\end{cases}$$
+Naturally, we want to study the aymptopic behaviour of $J_m$ and $Y_m$.
+As $z\to 0$, easily $J_0(z)\to 1$, $J_m(z)\sim (z/2)^m/m!$ and $Y_0(z)\to 2\log(z/2)/\pi$, $Y_m(z)=-(m-1)!(2/z)^m/\pi$.
+So $0$ is a singularity of $Y_m$.\\
+For large $z\to\infty$, $J_m,Y_m$ converges to $0$ oscillatorily, i.e.
+$$J_m(z)\sim\sqrt{\frac{2}{\pi z}}\cos\left( z-\frac{m\pi}{2}-\frac{\pi}{4} \right),Y_m(z)\sim\sqrt{\frac{2}{\pi z}}\sin\left( z-\frac{m\pi}{2}-\frac{\pi}{4} \right)$$
+This hints that we might want to take a look at the infinitely many zeros in $\mathbb R_{>0}$ of Bessel function.
+Let $j_{m,n}$ to be the $n^{th}$ positive zero of $J_m$.
+So the asymptopic formula above shows approximately $j_{m,n}\approx \tilde{j}_{m,n}=n\pi +m\pi/2-\pi/4$ with accuracy $|(j_{m,n}-\tilde{j}_{m,n})/j_{m,n}|<1/(10n)$ for $n>m^2/2$.
+A few of the actual values are below:
+$$j_{0,1}\approx 2.405,j_{0,2}\approx 5.520,j_{0,3}\approx 8.653$$
+It is a fun activity for the reader to try and draw $J_m$.
+\subsection{A Vibrating Drum}
+So the radial solutions become
+$$R_m(z)=R_m(\sqrt{\lambda}r)=AJ_m(\sqrt{\lambda}r)+BY_m(\sqrt{\lambda} r)$$
+For $A,B$ constants.
+But we want the solution to be bounded near zero which would mean $B=0$.
+We also need $R(1)=0$, therefore $\lambda_{m,n}=j_{m,n}^2$ are the eigenvalues.
+Therefore the spacial solutions are
+$$V_{m,n}(r,\theta)=\Theta_m(\theta)R_{m,n}(\sqrt{\lambda_{m,n}}r)=(A_{m,n}\cos(m\theta)+B_{m,n}\sin(m\theta))J_m(j_{m,n}r)$$
+Putting these eigenvalues to the temporal equation then shows $T_{m,n}$ are just linear combinations of $\cos(j_{m,n}ct)$ and $\sin(j_{m,n}ct)$.
+Putting everything together we get $u(r,\theta,t)=A+B+C$ where
+$$A=\sum_{n=1}^\infty J_0(j_{0n})r(A_{0n}\cos(j_{0n}ct)+C_{0n}\sin(j_{0n}ct))$$
+$$B=\sum_{m=1}^\infty\sum_{n=1}^\infty J_m(j_{m,n}r)(A_{m,n}\cos(m\theta)+B_{m,n}\sin(m\theta))\cos(j_{m,n}ct)$$
+$$C=\sum_{m=1}^\infty\sum_{n=1}^\infty J_m(j_{m,n}r)(C_{m,n}\cos(m\theta)+D_{m,n}\sin(m\theta))\sin(j_{m,n}ct)$$
+We still have to impose the initial conditions.
+$$\phi(r,\theta)=u(r,\theta,0)=\sum_{m=0}^\infty\sum_{n=1}^\infty J_m(j_{m,n}r)(A_{m,n}\cos(m\theta)+B_{m,n}\sin(m\theta))$$
+$$\psi(r,\theta)=\frac{\partial u}{\partial t}(r,\theta,0)=\sum_{m=0}^\infty\sum_{n=1}^\infty j_{mn}cJ_m(j_{m,n}r)(C_{m,n}\cos(m\theta)+D_{m,n}\sin(m\theta))$$
+As usual, we find the coefficient by orthogonality of these eigenfunctions.
+We do already know that they are orthogonal, what we really need is the normalisation constant.
+Some calculation then reveals
+$$\int_0^1J_m(j_{m,n}r)J_m(j_{m,k}r)r\,\mathrm dr=\frac{1}{2}(J_m^\prime(j_{m,n}))\delta_{nk}=\frac{1}{2}J_{m+1}(j_{m,n})^2\delta_{n,k}$$
+Therefore for $p>0$,
+$$A_{pq}=\left(\int_0^{2\pi}\int_0^1\cos(p\theta)J_p(j_{pq}r)\phi(r,\theta)r\,\mathrm dr\mathrm d\theta\right)\left( \frac{\pi+\delta_{0p}\pi}{2}J_{p+1}(j_{pq})^2 \right)^{-1}$$
+We can obtain $B_{m,n},C_{m,n},D_{m,n}$ in similar ways.
+\begin{example}
+    Consider $\phi=1-r^2$, so we have $\forall m,B_{m,n}=0$ and $\forall m\neq 0,A_{m,n}=0$.
+    We also set $\psi=0$, which means $C_{m,n}=D_{m,n}=0$ for all $m,n$.
+    By calculations,
+    $$A_{0,n}=\frac{2}{J_1(j_{0,n})^2}\frac{J_2(j_{0,n})}{j_{0,n}^2}\approx\frac{J_2(j_{0,n})}{n}$$
+    for large $n$.
+    So the solution is
+    $$u(r,\theta,t)=\sum_{n=1}^\infty\frac{2}{J_1(j_{0,n})^2}\frac{J_2(j_{0,n})}{j_{0,n}^2}J_0(j_{0,n}r)\cos(j_{0,n}ct)$$
+    So the fundamental frequency is $\omega=j_{0,1}c(2/d)\approx 4.8c/d$ which is higher than the value for a string, whose value is approximately $77\%$ of the figure for the drum.\\
+    A sketch of the nodal lines will then show that the solution is pretty close to our intuition.
+\end{example}

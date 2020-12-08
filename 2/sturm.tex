@@ -1,0 +1,217 @@
+\section{Sturm-Liouville Theory}
+\subsection{Review of Second-Order Linear ODEs}
+For a general inhomogeneous ODE $\mathcal Ly=f(x)$ where
+$$\mathcal Ly=\alpha(x)\frac{\mathrm d^2y}{\mathrm dx^2}+\beta(x)\frac{\mathrm dy}{\mathrm dx}+\gamma(x)y$$
+In general, the homogeneous equation $\mathcal Ly=0$ has two linearly independent solutions $y_1,y_2$.
+The complementary function $y_c(x)=Ay_1+By_2$ for constants $A,B$ is then the general solution to $\mathcal Ly=0$ by linearity.\\
+If we can find a particular solution (aka particular integral) $y_p$ to $\mathcal Ly=f$, then $y_p+y_c=y_p+Ay_1+By_2$ for $A,B$ constants is the general solution to $\mathcal Ly=f$ again by linearity.
+Two pieces of boundary data is then needed to determine the constants $A,B$.\\
+There are several types of boundary conditions.
+We sometimes get the Dirichlet condition of specifying the function's value at the endpoints, or the Neumann consitions of specifying the derivative's values at the endpoints.
+Sometimes these two types of conditions are mixed.\\
+The sort of conditions we often consider are homogeneous conditions, i.e. the function vanishes at the endpoints.
+The reason of it is that it allows the superposition of solutions in a linear DE.
+What if we come across a nonhomogeneous condition?
+We can use the complementary solution to cancel stuff out.\\
+Sometimes, we specify initial data of the function and its derivative as boundary conditions.\\
+Another matter of interest is the general eigenvalue problem.
+To solve $\mathcal Ly=f$ using eigenvalue decompositions like we did previously, we must first solve (subject to boundary conditions) the related eigenvalue problem
+$$\mathcal Ly=\alpha(x)\frac{\mathrm d^2y}{\mathrm dx^2}+\beta(x)\frac{\mathrm dy}{\mathrm dx}+\gamma(x)y=-\lambda\rho(x)y$$
+where $\rho$ is nonegative.
+This form often occurs after seperation of variables in a PDE.
+\subsection{Self-Adjoint Operators}
+\begin{definition}
+    For two functions $f,g:[a,b]\to\mathbb C$ we define their inner product to be
+    $$\langle f,g\rangle=\int_a^bf^*(x)g(x)\,\mathrm dx$$
+\end{definition}
+We can guarantee to rewrite the original eigenvalue problem into the Sturm-Liouville form, i.e. $\mathcal Ly=\lambda wy$ where we are able to rewrite $\mathcal Ly=-(py^\prime)^\prime+qy$ and $w$ is a nonnegative wavefunction.
+\footnote{The reason why there is a wavefunction there is just for convenience.}
+How to convert a second order linear ODE to this form?
+Simply multiply the diffential equation by an integrating factor $F$ that will be specified later and we can write
+$$\frac{\mathrm d}{\mathrm dx}(F\alpha y^\prime)-F^\prime\alpha y^\prime-F\alpha^\prime y^\prime+F\beta y^\prime+F\gamma y=-\lambda F\rho y$$
+So to eiminate the $y^\prime$ terms, we set
+$$F(x)=\exp\left(\int\frac{\beta-\alpha^\prime}{\alpha}\,\mathrm dx\right)$$
+which reduced the equation to
+$$(F\alpha y^\prime)^\prime+F\gamma y=-\lambda F\rho y$$
+Setting $p=F\alpha,q=F\gamma$ and $w=F\rho\ge 0$.
+\begin{example}
+    Consider the Hermite equation that appears in quantum mechanics
+    $$y^{\prime\prime}-2xy^\prime+2ny=0$$
+    Then $\alpha=1,\beta=-2x,\gamma=0,\lambda\rho=2n$, so the above procedure translates this to the Sturm-Liouville form
+    $$\mathcal L=(-e^{-x^2}y^\prime)^\prime=2ne^{-x^2}y$$
+\end{example}
+\begin{definition}
+    Let $\mathcal L:C\to C$ be an operator, where $C$ on a class of functions $[a,b]\to\mathbb C$ equipped with the inner product we defined previously.
+    This operator $\mathcal L$ is self-adjoint if $\langle y_1,\mathcal Ly_2\rangle=\langle\mathcal Ly_1,y_2\rangle$ for any $y_1,y_2\in C$.
+\end{definition}
+If we let $\mathbb L$ be the operator in the Strum-Liouville form, then
+\begin{align*}
+    \langle y_1,\mathcal Ly_2\rangle-\langle\mathcal Ly_1,y_2\rangle&=\int_a^b[-y_1(py_2^\prime)^\prime+y_1qy_2+y_2(py_1^\prime)^\prime-y_2qy_1]\,\mathrm dx\\
+    &=\int_a^b[-y_1(py_2^\prime)^\prime+y_2(py_1^\prime)^\prime]\,\mathrm dx\\
+    &=\int_a^b[-(y_1(py_2^\prime)^\prime+y_1^\prime py_2^\prime)+(y_2(py_1^\prime)^\prime+y_2^\prime py_1^\prime)]\,\mathrm dx\\
+    &=\int_a^b[-(py_1y_2^\prime)^\prime+(py_1^\prime y_2)^\prime]\,\mathrm dx\\
+    &=[-py_1y_2^\prime+py_1^\prime y_2]_a^b
+\end{align*}
+So for this operator to be self-adjoint, we need some good enough boundary conditions so that enough stuff vanishes.
+This includes homogeneous boundary condition $y(a)=y(b)=0$ or $y^\prime(a)=y^\prime(b)=0$ or mixed $y+ky^\prime=0$ etc..
+We say a Sturm-Liouville problem is regular if the boundary conditions are homogeneous.
+Periodic boundary conditions also work, where we can take $y(a)=y(b)$ and the derivatives are specified (or periodic) at the boundary.
+There can also be singular points of this ODE, where $p(a)=p(b)=0$.
+We can have combinations of above too.
+\subsection{Properties of Self-Adjoint Operators}
+\begin{definition}
+    The inner product of $y_1,y_2:[a,b]\to\mathbb C$ with respect to weight $w:[a,b]\to\mathbb R_{\ge 0}$ is
+    $$\langle f,g\rangle_w=\int_a^bwf^*g\,\mathrm dx=\langle wf,g\rangle=\langle f,wg\rangle$$
+\end{definition}
+Analogous to the finite dimensional case, we have
+\begin{theorem}\label{self-adjoint}
+    For a sufficiently nice self-adjoint operator $\mathcal L$ on a sufficiently nice space of functions:\\
+    (a) Eigenvalues of $\mathcal L$ are real.\\
+    (b) Eigenfunctions of it with different eigenvalues are orthogonal with respect to the weight $w$.\\
+    (c) We can take the eigenfunctions as a set of basis for the function space, just like Fourier series.
+\end{theorem}
+\begin{proof}[Proof of (a)]
+    1. If $\mathcal Ly=\lambda wy$, taking complex conjugate gives $\mathcal Ly^*=\lambda^*wy^*$.
+    Hence as $\mathcal L$ is self-adjoint,
+    $$0=\int_a^b(y^*\mathcal Ly-y\mathcal Ly^*)\,\mathrm dx=(\lambda-\lambda^*)\int_a^bw|y|^2\,\mathrm dx$$
+    which means $\lambda=\lambda^*$, so $\lambda$ is real.
+\end{proof}
+If $\lambda$ is non-degenerate (simple), i.e. it has a one-dimensional eigenspace, then $y$ is guaranteed to be real.
+Even if it has dimension $2$ (not more because the ODE is second order), we can still find two real functions as basis of the eigenspace.
+Also, by considering $u\mathcal Lv-v\mathcal Lu=(-p(uv^\prime-u^\prime v))^\prime$, one can show that a regular Sturm-Liouville problem always has all eigenvalues simple.
+\begin{proof}[Proof of (b)]
+    Suppose $\mathcal Ly_m=\lambda_mwy_m$ and $\mathcal Ly_n=\lambda_nwy_n$, then
+    $$0=\int_a^by_n\mathcal Ly_m-y_m\mathcal Ly_n\,\mathrm dx=(\lambda_m-\lambda_n)\int_a^bwy_ny_m\,\mathrm dx$$
+    But $\lambda_m$ and $\lambda_n$ are distinct.
+    The claim follows.
+\end{proof}
+As an aside, we do not really need the weight function in order to formulate Sturm-Liouville theory, since we can do the transformation $\tilde{y}=\sqrt{w}y$ and replace $\mathcal Ly$ by $(1/\sqrt{w})\mathcal L(\tilde{y}/\sqrt{w})$.
+Yet the analytic property is generally simpler if we keep $w$.\\
+What?
+How about (c), you say?
+Bold of you to assume we'll prove it.
+We are just gonna take it (and several other properties we want it to have) as truth and do stuff with this idea.
+\subsection{Eigenfunction Expansions}
+So basically we just want to find an expansion
+$$f=\sum_{n=1}^\infty a_ny_n$$
+where $y_n$ is a set of eigenfunctions of some self-adjoint operator.
+Theorem \ref{self-adjoint}(c) shows that we can do it.
+To find the coefficients $a_n$, we can they use the orthogonality to get
+$$\int_a^bwy_mf\,\mathrm dx=\sum_{n=1}^\infty a_n\int_a^bwy_ny_m\,\mathrm dx=a_m\int_a^bwy_n^2\,\mathrm dx$$
+So
+$$a_n=\left(\int_a^bwy_nf\,\mathrm dx\middle)\right/\left(\int_a^bwy_n^2\,\mathrm dx\right)$$
+It's a common practice not to normalise the eigenfunctions as it is not really always clean.
+Of course, if we want, we can always write down
+$$Y_n=y_n\left/\sqrt{\int_a^bwy_n^2\,\mathrm dx}\right.$$
+So we can get rid of the denominator in $a_n$ and the coefficients will have the expression
+$$A_n=\int_a^bwy_nf\,\mathrm dx=a_n\int_a^bwy_n^2\,\mathrm dx$$
+but it isn't that useful and can cause some messiness.
+\begin{example}
+    Recall the particular operator already in Sturm-Liouville form $\mathcal Ly=y^{\prime\prime}$, then (with appropriate boundary conditions) we can easily get the eigenvalues $\lambda_n=(n\pi/L)^2$ and eigenfunctions being the trigonometrics.
+    This just reproduces the Fourier series.
+\end{example}
+\subsection{Completeness and Parseval's Identity}
+We expand
+\begin{align*}
+    0&=\int_a^bw\left( f(x)-\sum_{n=1}^\infty a_ny_n \right)^2\,\mathrm dx\\
+    &=\int_a^bw\left( f^2-2f\sum_{n=1}^\infty a_ny_n+\sum_{n=1}^\infty a_n^2y_n^2 \right)\,\mathrm dx\\
+    &=\int_a^bwf^2\,\mathrm dx-\sum_{n=1}^\infty a_n^2\int_a^bwy_n^2\,\mathrm dx
+\end{align*}
+Hence we have
+$$\int_a^bwf^2\,\mathrm dx=\sum_{n=1}^\infty a_n^2\int_a^bwy_n^2\,\mathrm dx=\sum_{n=1}^\infty A_n^2$$
+which Parseval's identity in this general case.
+Easily our previous Parseval's Theorem on Fourier series is a special case.\\
+If some of the eigenfunctions are missing from the series, then this gives
+$$\int_a^bwf^2\,\mathrm dx\ge\sum_{n=1}^\infty A_n^2$$
+This is known as Bessel's Inequality.\\
+Consider the partial sums $\sum_{n\le N}a_ny_n$, then we shall have $S_N\to f$ as $N\to\infty$ where we would like the style of convergence to be
+$$\epsilon_N=\int_a^bw[f(x)-S_N(x)]^2\,\mathrm dx\to 0,N\to\infty$$
+An interesting question is that, while we know (maybe) the series converges as we want, if we truncate the sequence in some $N$, would the coefficients $\{a_n\}_{n\le N}$ provide the best approxmation (with respect to the error defined in this way) of that particular partial sum, or a different set of partial coefficient will yield a better result?
+To answer this, we evaluate
+$$\frac{\partial\epsilon_N}{\partial a_n}=-2\int_a^bwy_n\left( f-\sum_{k=1}^Na_ky_k \right)\,\mathrm dx=-2\int_a^bwfy_n-a_nwy_n^2\,\mathrm dx$$
+which is zero when $a_n$ is of the expression we got earlier.
+We can see it is indeed a minimum by observing that
+$$\frac{\partial^2\epsilon_N}{\partial a_n^2}=2\int_a^bwy_n^2\,\mathrm dx\ge 0$$
+This answers our question.
+\subsection{Legendre's Equation}
+Take the usual spherical polar coordinate
+$$\begin{cases}
+    x=r\sin\theta\cos\phi\\
+    y=r\sin\theta\sin\phi\\
+    z=r\cos\theta
+\end{cases}$$
+where Laplace's equation $\nabla^2 u=0$ translates to
+$$\frac{1}{r^2}\frac{\partial}{\partial r}\left( r^2\frac{\partial u}{\partial r} \right)+\frac{1}{r^2\sin\theta}\frac{\partial}{\partial\theta}\left( \sin\theta\frac{\partial u}{\partial\theta} \right)+\frac{1}{r^2\sin^2\theta}\frac{\partial^2u}{\partial\phi^2}=0$$
+Seperation of variables $u=R(r)\Theta(\theta)\Phi(\phi)$ then gives
+$$\frac{1}{\sin\theta}(\Theta^\prime\sin\theta)^\prime+\left( K-\frac{m^2}{\sin^2\theta} \right)\Theta=0$$
+where $K,m$ are constants which essentially makes it an eigenvalue problem.
+Now the transformation $x=\cos\theta\in[-1,1]$ and renaming $\Theta$ as $y$ then gives Legendre's Equation
+$$(1-x^2)y^{\prime\prime}-2xy^\prime+\lambda y=0$$
+where $\lambda$ is a constant which is again intepreted as an eigenvalue.
+This is already in Strum-Liouville form by taking $p=1-x^2,q=0,w=1$.
+Now $p=1-x^2$ vanishes at the boundary $\pm 1$, so this equation has to be self-adjoint.
+We assume that $y$ is bounded near the boundary.\\
+We now seek a power series solution to the problem.
+If we set
+$$y=\sum_{n=0}^\infty c_nx^n$$
+Then substitution gives
+$$(n+2)(n+1)c_{n+2}-n(n-1)c_n-2nc_n+\lambda c_n=0\implies c_{n+2}=\frac{n(n+1)-\lambda}{(n+1)(n+2)}c_n$$
+The iteration steps by $2$, so we get two linearly independent solutions
+\begin{align*}
+    y_{\text{even}}&=c_0\left( 1+\frac{-\lambda}{2!}x^2+\frac{(6-\lambda)(-\lambda)}{4!}x^4+\cdots \right)\\
+    y_{\text{odd}}&=c_1\left( x+\frac{2-\lambda}{3!}x^3+\cdots \right)
+\end{align*}
+Note that $c_{n+2}/c_n\to 1$, so the both series has radius of convergence $1$ but they diverges at $x=\pm 1$.
+However, this is not the end of the world!
+These series may not be infinite.
+If $\lambda=l(l+1)$ for some $l\in\mathbb N$, then one of these two series will terminate and give a polynomial solution.
+These polynomials are called Legendre polynomials $P_l(x)$ which are eigenfunctions of the Legendre equation.
+Conventionally we normalise $P_l$ by requiring $P_l(1)=1$.
+One can check that this restricts $P_l([-1,1])\subset [-1,1]$ and $|P_l(-1)|=1$.
+By calculation we have
+$$P_0(x)=1,P_1(x)=x,P_2(x)=\frac{3x^2-1}{2},P_3(x)=\frac{5x^3-3x}{2},\ldots$$
+We easily observe that $P_l$ has $l$ roots in $[-1,1]$, also $P_l$ is odd if $l$ is odd, and even when $l$ is even.
+By orthogonality and some calculation,
+$$\forall n\neq m,\int_{-1}^1P_nP_m\,\mathrm dx=0,\int_{-1}^1P_n^2\,\mathrm dx=\frac{2}{2n+1}$$
+There are several other ways to characterise Legendre polynomails.
+One can prove that we have
+$$P_n(x)=\frac{1}{2^nn!}\frac{\mathrm d^n}{\mathrm dx^n}(x^2-1)^n,\sum_{n=0}^\infty P_n(x)t^n=\frac{1}{\sqrt{1-2xt+t^2}}$$
+We also have the recursions
+$$l(l+1)P_{l+1}(x)=(2l+1)xP_l(x)-lP_{l-1}(x),(2l+1)P_l(x)=\frac{\mathrm d}{\mathrm dx}(P_{l+1}(x)-P_{l-1}(x))$$
+If we take these $P_l$ as a set of eigenfunctions, then any well-behaved $f$ on $[-1,1]$ can be expressed as
+$$f(x)=\sum_{l=0}^\infty a_lP_l(x),a_l=\frac{2l+1}{2}\int_{-1}^1f(x)P_l(x)\,\mathrm dx$$
+\begin{example}
+    We can verify that $f(x)=(15x^2-3)/2=P_0(x)+5P_2(x)$.
+\end{example}
+\begin{example}
+    The odd equare wave with $f([0,1))=\{1\}$ has the expansion
+    $$\sum_{m=1}^\infty (P_{2m}(0)-P_{2m+2}(0))P_{2m+1}(x)$$
+\end{example}
+\subsection{Inhomogeneous ODEs}
+Consider the ODE $\mathcal Ly=f=wF$ (with homogeneous boundary conditions so that $\mathcal L$ is self-adjoint) where $w\ge 0$ is our wavefunction.
+Given eigenfunctions $\{y_n\}$ satisfying $\mathcal Ly_n=\lambda_nwy_n$ for eigenvalues $\{\lambda_n\}$.
+We now try to find a solution in the form $y=\sum_nc_ny_n$.
+To do this, we expand $F=\sum_na_ny_n$ where
+$$a_n=\left( \int_a^bwFy_n\,\mathrm dx\middle) \right/\left( \int_a^bwy_n^2\,\mathrm dx \right)$$
+then
+$$w\sum_na_ny_n=wF=\mathcal Ly=\mathcal L\sum_nc_ny_n=\sum_nc_n\mathcal Ly=w\sum_nc_n\lambda_ny_n$$
+So take
+$$y=\sum_n\frac{a_n}{\lambda_n}y_n$$
+gives a particular solution, assuming everything is well-defined and converges nicely enough.\\
+An aside:
+The driving force $F$ sometimes induces a linear response term $\tilde\lambda wy$, so the solution is $\mathcal Ly-\tilde{\lambda}wy=f$.
+Then our particular solution can be
+$$y=\sum_{\lambda_n\neq\tilde{\lambda}}\frac{a_n}{\lambda_n-\tilde\lambda}y_n$$
+Now back to theme.
+If we expand the expression of $a_n$, we can get
+\begin{align*}
+    y(x)&=\sum_{n=1}^\infty\frac{a_n}{\lambda_n}y_n(x)\\
+    &=\sum_{n=1}^\infty\frac{y_n(x)}{\lambda_nN_n}\int_a^bw(\xi)F(\xi)y_n(\xi)\,\mathrm d\xi,N_n=\int_a^bwy_n^2\,\mathrm dx\\
+    &=\int_a^b\left( \sum_{n=1}^\infty\frac{y_n(x)y_n(\xi)}{\lambda_nN_n} \right)w(\xi)F(\xi)\,\mathrm d\xi\\
+    &=\int_a^bG(x,\xi)f(\xi)\,\mathrm d\xi,G(x,\xi)=\sum_{n=1}^\infty\frac{y_n(x)y_n(\xi)}{\lambda_nN_n}
+\end{align*}
+This $G(x,\xi)$ is called the Green's function of this particular eigenvalue problem of that self-adjint operator.
+Worth noting that $G$ does not depend on the forcing term $f$.
+The Green's function also induces
+$$\mathcal L^-(\phi)=\int_a^bG(x,\xi)\phi(\xi)\,\mathrm d\xi$$
+which can be taken as kind of an inverse operator to $\mathcal L$ since $\mathcal L(\mathcal L^-(f))=f$.

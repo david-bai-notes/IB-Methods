@@ -1,0 +1,268 @@
+\section{Fourier Transforms}
+\subsection{Introduction}
+\begin{definition}
+    The Fourier transform (FT) of a function $f(x)$ is
+    $$\tilde{f}(k)=(\mathcal F(f))(k)=\int_{-\infty}^\infty f(x)e^{-ikx}\,\mathrm dx$$
+    The inverse Fourier transform is
+    $$f(x)=(\mathcal F^{-1}(\tilde{f}))(x)=\frac{1}{2\pi}\int_{-\infty}^\infty\tilde{f}(k)e^{ikx}\,\mathrm dk$$
+\end{definition}
+Beware that there are several conventioned for FT.
+$\tilde{f}$ is said to be in the frequency domain.
+\begin{theorem}[Fourier Inversion Theorem]
+    $\mathcal F^{-1}\circ\mathcal F(f)=f$ given that all integrals involved are well-behaved (a sufficient condition is $f,\tilde{f}$ both being absolutely integrable).
+\end{theorem}
+\begin{example}
+    Take $f(x)=(1/(\sigma\sqrt\pi))e^{-x^2/\sigma^2}$, then we can either find $\tilde{f}$ by completing square or observe that
+    $$\tilde{f}(k)=\frac{1}{\sigma\sqrt{\pi}}\int_{-\infty}^\infty e^{-x^2/\sigma^2}e^{-ikx}\,\mathrm dx=\frac{1}{\sigma\sqrt{\pi}}\int_{-\infty}^\infty e^{-x^2/\sigma^2}\cos(kx)\,\mathrm dx$$
+    Differentiate under the integral sign,
+    \begin{align*}
+        \frac{\mathrm d\tilde{f}}{\mathrm dk}&=-\frac{1}{\sigma\sqrt\pi}\int_{-\infty}^\infty xe^{-x^2/\sigma^2}\sin(kx)\,\mathrm dx\\
+        &=-\frac{1}{\sigma\sqrt\pi}\int_{-\infty}^\infty\left( \frac{k\sigma^2}{2} \right)e^{-x^2/\sigma^2}\cos(kx)\,\mathrm dx\\
+        &=-\frac{k\sigma^2}{2}\tilde{f}(k)
+    \end{align*}
+    Integrating this differential equation on $\tilde{f}$ gives $\tilde{f}(k)=Ce^{-k^2\sigma^2/4}$ for some constant $C$.
+    Setting $k=0$ gives $C=1$, therefore $\tilde{f}(k)=e^{-k^2\sigma^2/4}$.
+    One can show that $\mathcal F^{-1}\tilde{f}=f$.
+\end{example}
+\begin{example}
+    The Fourier transform of $f(x)=e^{-a|x|}$ is $\tilde{f}(k)=2a/(a^2+k^2)$ either by direct integration or superposition.
+\end{example}
+\subsection{Relation with Fourier Series}
+Recall that the Fourier series has the form
+$$f(x)=\sum_{n=-\infty}^\infty c_ne^{ik_nx},k_n=n\Delta k,\Delta k=\frac{\pi}{L}$$
+Now we know that
+$$c_n=\frac{1}{2L}\int_{-L}^Lf(x)e^{-ik_nx}\,\mathrm dx=\frac{\Delta k}{2\pi}\int_{-L}^Lf(x)e^{-ik_nx}\,\mathrm dx$$
+Imagine taking $L\to\infty,\Delta k\to 0$ then we get the expression of Fourier transform multiplied by an infinitesimal term.
+To further justify the analogy, observe that we get
+$$f(x)=\sum_{n=-\infty}^\infty\frac{\Delta k}{2\pi}e^{ik_nx}\int_{-L}^Lf(x')e^{-ik_nx'}\,\mathrm dx'$$
+This looks like a Riemann sum, so let us take the limit $L\to\infty,\Delta k\to 0$ which gives
+$$f(x)=\frac{1}{2\pi}\int_{-\infty}^\infty \left( \int_{-\infty}^\infty f(x')e^{-ikx'}\,\mathrm dx' \right)e^{ikx}\,\mathrm dk=\mathcal F^{-1}\circ\mathcal F(f)(x)$$
+Note that when $f$ is discontinuous at $x$, then $\mathcal F^{-1}\circ\mathcal F(f)(x)=(f(x_-)+f(x_+))/2$ which is a similar behaviour to that of a Fourier series.
+\subsection{Properties of Fourier Transform}
+The operators $\mathcal F,\mathcal F^{-1}$ is both linear.
+Also, the translation $h(x)=f(x-\lambda)$ gives $\tilde{h}(k)=e^{-i\lambda k}\tilde{f}(k)$.
+Correspondingly, the frequency shift $h(x)=e^{i\lambda x}f(x)$ gives $\tilde{h}(k)=\tilde{f}(k-\lambda)$.
+The scaling $h(x)=f(\lambda x)$ for $\lambda\neq 0$ gives $\tilde{h}(k)=\tilde{f}(k/\lambda)/|\lambda|$.\\
+These are all trivial facts, here is a slightly more interesting one:
+$h(x)=xf(x)$ gives $\tilde{h}(k)=i\tilde{f}^\prime(k)$.
+Indeed,
+$$\tilde{h}(k)=\int_{-\infty}^\infty xf(x)e^{-ikx}\,\mathrm dx=-\frac{1}{i}\frac{\mathrm d}{\mathrm dk}\int_{-\infty}^\infty f(x)e^{-ikx}\,\mathrm dx=i\tilde{f}^\prime(k)$$
+What's more important is that if $f$ vanishes at $\pm\infty$ and $h(x)=f^\prime(x)$ gives $\tilde{h}(k)=ik\tilde{f}(k)$ via integration by parts
+$$\tilde{h}(k)=\int_{-\infty}^\infty f^\prime(x)e^{-ikx}\,\mathrm dx=[f(x)e^{-ikx}]_{-\infty}^\infty-\int_{-\infty}^\infty (-ik)f(x)e^{-ikx}\,\mathrm dx=ik\tilde{f}(k)$$
+So we can employ Fourier transform to turn a (nice enough) differential equation into an algebraic one.\\
+We also have a sense of duality between $x$ and $k$ here.
+Observe that we have
+$$f(-x)=\frac{1}{2\pi}\int_{-\infty}^\infty\tilde{f}(k)e^{-ikx}\,\mathrm dk,f(-k)=\frac{1}{2\pi}\int_{-\infty}^\infty\tilde{f}(x)e^{-ikx}\,\mathrm dx$$
+Therefore $g(x)=\tilde{f}(x)$ iff $\tilde{g}(k)=2\pi f(-k)$..
+So $f(-x)=(2\pi)^{-1}\mathcal F^2(f)(x)$.
+Iterating this gives $\mathcal F^4(f)(x)=4\pi^2f(x)$.
+\begin{example}
+    Consider the ``top hat'' function
+    $$f(x)=\begin{cases}
+        1\text{, if $|x|\le a$}\\
+        0\text{, if $|x|>a$}
+    \end{cases}$$
+    We get
+    $$\tilde{f}(k)=\int_{-\infty}^\infty f(x)e^{-ikx}\,\mathrm dx=\int_{-a}^a\cos(kx)\,\mathrm dx=\frac{2\sin(ka)}{k}$$
+    Fourier inversion theorem then gives
+    $$\frac{1}{\pi}\int_{-\infty}^\infty e^{ikx}\frac{\sin ka}{k}\,\mathrm dk=\begin{cases}
+        1\text{, if $|x|<a$}\\
+        0\text{, if $|x|>a$}
+    \end{cases}$$
+    Set $x=0$ and $k\to x$ gives
+    $$\int_0^\infty\frac{\sin(ax)}{x}\,\mathrm dx=\frac{\pi}{2}\operatorname{sgn}(a)=\begin{cases}
+        \pi/2\text{, if $a>0$}\\
+        0\text{, if $a=0$}\\
+        -\pi/2\text{, if $a<0$}
+    \end{cases}$$
+    which is pretty awesome.
+\end{example}
+\subsection{Convolution and Parseval's Theorem}
+Recall that
+\begin{definition}
+    The convolution of $f$ and $g$ is
+    $$(f\ast g)(x)=\int_{-\infty}^\infty f(y)g(x-y)\,\mathrm dy$$
+\end{definition}
+We want to multiply together functions in frequency domain, that is $\tilde{h}=\tilde{f}\tilde{g}$, and find its inverse Fourier transform.
+\begin{align*}
+    h(x)&=\frac{1}{2\pi}\int_{-\infty}^\infty\tilde{f}(k)\tilde{g}(k)e^{ikx}\,\mathrm dk\\
+    &=\frac{1}{2\pi}\int_{-\infty}^\infty\left( \int_{-\infty}^\infty f(y)e^{-iky}\,\mathrm dy \right)\tilde{g}(k)e^{ikx}\,\mathrm dk\\
+    &=\int_{-\infty}^\infty f(y)\left( \frac{1}{2\pi}\int_{-\infty}^\infty\tilde{g}(k)e^{ik(x-y)}\,\mathrm dk \right)\,\mathrm dy\\
+    &=\int_{-\infty}^\infty f(y)g(x-y)\,\mathrm dy\\
+    &=(f\ast g)(x)
+\end{align*}
+By duality, we also have
+$$h(x)=f(x)g(x)\implies \tilde{h}(k)=\frac{1}{2\pi}\int_{-\infty}^\infty \tilde{f}(p)\tilde{g}(k-p)\,\mathrm dp=\frac{1}{2\pi}(\tilde{f}\ast\tilde{g})(k)$$
+Now consider $h(x)=g^*(-x)$, then
+\begin{align*}
+    \tilde{h}(k)&=\int_{-\infty}^\infty g^\ast(-x)e^{-ikx}=\left( \int_{-\infty}^\infty g(-x)e^{ikx}\,\mathrm dx \right)^*\\
+    &=\left( \int_{-\infty}^\infty g(y)e^{-iky}\,\mathrm dy \right)^*=\tilde{g}^*(k)
+\end{align*}
+By our study of convolution we have
+$$\int_{-\infty}^\infty f(y)g^*(y-x)\,\mathrm dy=\frac{1}{2\pi}\int_{-\infty}^\infty\tilde{f}(k)\tilde{g}^*(k)e^{ikx}\,\mathrm dx$$
+Set $x\to 0$ gives
+$$\int_{-\infty}^\infty f(y)g^*(y)\,\mathrm dy=\frac{1}{2\pi}\int_{-\infty}^\infty\tilde{f}(k)\tilde{g}^*(k)\,\mathrm dk\implies\langle g,f\rangle=\frac{1}{2\pi}\langle \tilde{g},\tilde{f}\rangle$$
+Setting $g=f$ then gives
+\begin{theorem}[Parseval's Theorem]
+    $$\int_{-\infty}^\infty|f(x)|^2\,\mathrm dx=\frac{1}{2\pi}\int_{-\infty}^\infty |\tilde{f}(k)|^2\,\mathrm dk$$
+\end{theorem}
+\subsection{Fourier Transform of Generalised Functions}
+We want to apply $\mathcal F$ to generalised functions.
+If one wants to be precise, one can view them as the limit of the sequence of the Fourier transforms of well-defined well-behaved functions that approaches the generalised function in question.
+The details can be justified by Parseval's theorem, but the treatment is beyond the scope of this course.\\
+Of course the main culprit of generalised functions is $\delta$.
+Surprisingly, $\delta$ is found naturally in Fourier transform.
+For a well-behaved $f$,
+\begin{align*}
+    f(x)&=\mathcal F^{-1}(\mathcal F(f))(x)=\frac{1}{2\pi}\int_{-\infty}^\infty\int_{-\infty}^\infty f(u)e^{-iku}e^{ikx}\,\mathrm du\mathrm dk\\
+    &=\int_{-\infty}^\infty f(u)\left( \frac{1}{2\pi}\int_{-\infty}^\infty e^{ik(x-u)}\,\mathrm dk \right)\,\mathrm du
+\end{align*}
+So we might identify
+\footnote{The number of things that would go wrong with this is overwhelming, but what the hell.}
+$$\delta(x-u)=\frac{1}{2\pi}\int_{-\infty}^\infty e^{ik(x-u)}\,\mathrm dk$$
+A direct calculation, on the other hand yields
+$$\tilde\delta(k)=\int_{-\infty}^\infty \delta(x)e^{ikx}\,\mathrm dx=1$$
+So dually, the Fourier transform of the constant $f(x)=1$ is $\tilde{f}(k)=2\pi\delta(x)$.
+Also $f(x)=\delta(x-a)$ has $\tilde{f}(k)=e^{ika}$.
+If we have exponentials then we naturally have trigonometrics, so here goes:
+$f(x)=\cos(\omega x)$ has $\tilde{f}(k)=\pi(\delta(k+\omega)+\delta(k-\omega))$ and $f(x)=\sin(\omega x)$ has $\tilde{f}(k)=i\pi (\delta(k+\omega)-\delta(k-\omega))$.\\
+Let's move on to something slightly better.
+Consider the Heaviside function
+$$H(x)=\begin{cases}
+    1\text{, if $x>0$}\\
+    0\text{, if $x<0$}\\
+    1/2\text{, if $x=0$}
+\end{cases}$$
+Then $H(x)+H(-x)=1$ for any $x$.
+Therefore $\tilde{H}(k)+\tilde{H}(-k)=2\pi\delta(k)$.
+But $H^\prime(x)=\delta(x)$, hence $ik\tilde{H}(k)=1$.
+So for these results to be consistent (note that $k\delta(k)=1$), we had to have $\tilde{H}(k)=\pi\delta(k)+(ik)^{-1}$.
+The formula can look nicer if we shift a bit and consider instead $f(x)=\operatorname{sgn}(x)/2$ which has $\tilde{f}(k)=(ik)^{-1}$.
+\subsection{Applications of Fourier Transforms}
+The first very important application of Fourier transforms is in boundary value problems of ODEs.
+Consider the problem $y^{\prime\prime}-y=f(x)$ with homogeneous boundary conditions $y\to 0$ as $x\to\pm\infty$.
+Apply Fourier transform on both sides gives
+$$(-k^2-1)\tilde{y}=\tilde{f}\implies \tilde{y}(k)=\tilde{f}(k)\tilde{g}(k),\tilde{g}(k)=-\frac{1}{1+k^2}$$
+Therefore
+\begin{align*}
+    y(x)&=\int_{-\infty}^\infty f(u)g(x-u)\,\mathrm du\\
+    &=-\frac{1}{2}\int_{-\infty}^\infty f(u)e^{-|x-u|}\,\mathrm du\\
+    &=-\frac{1}{2}\int_{-\infty}^xf(u)e^{u-x}\,\mathrm du-\frac{1}{2}\int_x^\infty f(u)e^{x-u}\,\mathrm du
+\end{align*}
+which is in the form of the solution we would have obtained if we use Green's function instead.
+Of course, we can solve this by inverse Fourier transform as well, which is quite easy once we introduce Fast Fourier Transform (FFT).
+We will go through it later.\\
+Another motivation of Fourier transform in signal processing.
+Suppose we are given some sort of input signal $J(t)$ which is acted on by some linear differential operator $\mathcal L$ to yield output $O(t)$.
+The Fourier transform
+$$\tilde{J}(\omega)=\int_{-\infty}^\infty J(t)e^{i\omega t}\,\mathrm dt$$
+is called the resolution.
+In the frequency domain, the action of $\mathcal L$ in $J(t)$ is just multiplying $\tilde{J}(\omega)$ by a transfer function $\tilde{R}\omega$ to yield the output
+$$O(t)=\frac{1}{2\pi}\int_{-\infty}^\infty\tilde{R}(\omega)\tilde{J}(\omega)e^{i\omega t}\,\mathrm d\omega$$
+The inverse Fourier transform $R$ of $\tilde{R}$ is called the response function.
+So $O$ is simply $J\ast R$.
+For example, if there is no input $J(t)=0$ for $t<0$.
+By causality, we expect $R(t)=0$ for $t<0$.
+Therefore
+$$O(t)=\int_0^tJ(u)R(t-u)\,\mathrm du$$
+which is in the same form as the Green's function in an initial value problem.\\
+We want to explore the general transfer functions for a class of ODEs.
+Suppose the input/output relation is
+$$\mathcal LO=\left( \sum_{i=0}^na_i\frac{\mathrm d^i}{\mathrm dx^i} \right)O=J$$
+where $a_i$ are constants.
+Taking Fourier transform gives
+$$(a_0+a_1(i\omega)+\ldots,a_n(i\omega)^n)\tilde{O}(\omega)=\tilde{J}(\omega)$$
+Therefore $\tilde{R}(\omega)=(a_0+a_1(i\omega)+\ldots,a_n(i\omega)^n)^{-1}$.
+Factorise the polynomial to turn it into the form $\tilde{R}(\omega)=((i\omega-c_1)^{k_1}\cdots (i\omega-c_r)^{k_r})^{-1}$ where $i\neq j\implies c_i\neq c_j$.
+Partial fraction gives
+$$\tilde{R}(\omega)=\frac{1}{(i\omega-c_1)^{k_1}\cdots (i\omega-c_r)^{k_r}}=\sum_{j=1}^r\sum_{m=1}^{k_j}\frac{\Gamma_{jm}}{(i\omega-c_j)^m}$$
+for constants $\Gamma_{jm}$.
+But we know that
+$$\mathcal F^{-1}\left( \frac{1}{(i\omega-a)^m} \right)=\begin{cases}
+    t^{m-1}e^{at}/(m-1)!\text{, if $t>0$}\\
+    0\text{, if $t<0$}
+\end{cases}$$
+Getting back to time domain, we obtain the response function
+$$R(t)=\sum_{j=1}^r\sum_{m=1}^{k_j}\Gamma_{jm}\frac{t^{m-1}}{(m-1)!}e^{c_jt},t>0$$
+\begin{example}
+    Consider the damp oscillator $\mathcal Ly=y^{\prime\prime}+2py^\prime+(p^2+q^2)y=f(t)$ with damping $p>0$ with homogeneous initial conditions $y(0)=y^\prime(0)=0$.
+    The Fourier transform of this is $(i\omega)^2\tilde{y}+2ip\omega\tilde{y}+(p^2+q^2)\tilde{y}=\tilde{f}$, so
+    $$\tilde{y}=\frac{\tilde{f}}{-\omega^2+2ip\omega+p^2+q^2}=\tilde{R}\tilde{f},\tilde{R}=\frac{1}{-\omega^2+2ip\omega+p^2+q^2}$$
+    So
+    $$y(t)=\int_0^tR(t-\tau)f(\tau)\,\mathrm d\tau,R(t-\tau)=\frac{1}{2\pi}\int_{-\infty}^\infty\frac{\exp(i\omega(t-\tau))\,\mathrm d\omega}{p^2+q^2+2ip\omega-\omega^2}$$
+    which, as one can verify, is analogous to the Green's function methods since $\mathcal LR(t-\tau)=\delta(t-\tau)$.
+\end{example}
+\subsection{Discrete Fourier Transform}
+Suppose we sample a signal $h(t)$ at equal times $t_n=n\Delta$ with time-sampling $\Delta$ and values $h_n=h(n\Delta)$ with $n\in\mathbb Z$.
+That is, the sampling frequency is $f_s=1/\Delta$ (and angular frequency $\omega_s=2\pi f_s=2\pi/\Delta$).
+The Nyquist frequency $f_c=1/(2\Delta)$ is the highest frequency actually sampled at $\Delta$.
+Suppose we have a (sinusoidal) signal with a given frequency $f$
+$$g_f(t)=A\cos(2\pi ft+\phi)=\frac{A}{2}(e^{i\phi}e^{2\pi ift}+e^{-i\phi}e^{-2\pi ift})$$
+What happens if we sample at $f=f_c$?
+We have
+$$g_{f_c}(t_n)=A\cos\left( 2\pi\frac{1}{2\Delta}n\Delta+\phi \right)=(A\cos\phi)\cos(\pi n)=A'\cos(2\pi f_ct_n)$$
+So information about phase and amplitude are lost.
+Even worse if we sample above $f>f_c$:
+If we sample at $f=f_c+\delta f$ for some small $\delta f>0$, then
+$$g_f(t_n)=A\cos(2\pi(f_c+\delta f)t_n+\phi)=A\cos(2\pi(f_c-\delta f)t_n-\phi)$$
+So the effect is just aliasing a ``ghost signal'' to frequency $f_c-\delta f$ (or $-(f_c-\delta f)$), which is a contamination of the information.
+\begin{definition}
+    A signal $g(t)$ is bandwidth limited if it contains no frequency above some $\omega_{\max{}}=2\pi f_{\max{}}$, that is $\tilde{g}(\omega)=0$ for any $|\omega|>\omega_{\max{}}$.
+\end{definition}
+So for a bandwidth limited signal $g(t)$ would have
+$$g(t)=\frac{1}{2\pi}\int_{-\infty}^\infty\tilde{g}(\omega)e^{i\omega t}\,\mathrm d\omega=\frac{1}{2\pi}\int_{-\omega_{\max{}}}^{\omega_{\max{}}}\tilde{g}(\omega)e^{i\omega t}\,\mathrm d\omega$$
+\begin{theorem}[Sampling Theorem]
+    Let $g$ be a bandwidth limited signal and $\Delta=1/(2f_{\max{}})$, then define
+    $$g_n=g(t_n)=\frac{1}{2\pi}\int_{-\omega_{\max{}}}^{\omega_{\max{}}}\tilde{g}(\omega)e^{i\pi n\omega/\omega_{\max{}}}\,\mathrm d\omega$$
+    which induces a Fourier series
+    $$\tilde{g}_{\mathrm{per}}(\omega)=\frac{\pi}{\omega_{\max{}}}\sum_{n=-\infty}^\infty g_ne^{-i\pi n\omega/\omega_{\max{}}}$$
+    Then, we have
+    $$\tilde{g}(\omega)=\tilde{g}_{\mathrm{per}}(\omega)\tilde{h}(\omega),\tilde{h}(\omega)=\begin{cases}
+        1\text{, if $|\omega|\le\omega_{\max{}}$}\\
+        0\text{, otherwise}
+    \end{cases}$$
+    Inverting which gives
+    \begin{align*}
+        g(t)&=\frac{1}{2\omega_{\max{}}}\sum_{n=-\infty}^\infty g_n\int_{-\omega_{\max{}}}^{\omega_{\max{}}}\exp\left( i\omega\left( t-\frac{n\pi}{\omega_{\max{}}} \right) \right)\,\mathrm d\omega\\
+        &=\sum_{n=-\infty}^\infty g_n\frac{\sin(\omega_{\max{}} t-\pi n)}{\omega_{\max{}} t-\pi n}
+    \end{align*}
+    So $g(t)$ can be exactly represented after sampling at discrete times $t_n$.
+\end{theorem}
+\begin{proof}
+    Self-explanatory.
+\end{proof}
+Suppose we have a finite number $N$ of samples $h_m=h(t_m)$ where $t_m=m\Delta$ for $m=0,\ldots,N-1$.
+We want to approximate the Fourier Transform for $N$ frequencies within $f_c=1/(2\Delta)$ with equally spaced frequencies with space $\Delta_f=1/(N\Delta)$ in the range $[-f_c,f_c]$.
+So basically we are just looking for $f_n=n\Delta_f=n/(N\Delta)$ where $n=-N/2,\ldots,0,\ldots,N/2$.
+Note that $f_c$ and $-f_c$ are aliased together, so the $-N/2$ and $N/2$ are basically the same.
+Also $(m+N/2)\Delta_f=f_c+\delta f$ is aliased to $(-m+N/2)\Delta_f=-(f_c-\delta f)$, so we choose instead $f_n=n/(N\Delta)$ with $n=0,\ldots,N-1$.
+\begin{definition}
+    Observe that
+    \begin{align*}
+        \tilde{h}(f_n)&=\int_{-\infty}^\infty h(t)e^{-2\pi if_nt}\,\mathrm dt\approx\Delta\sum_{n=0}^{N-1}h_me^{-2\pi i f_nt_m}\\
+        &=\Delta\sum_{m=0}^{N-1}h_me^{-2\pi imn/N}=\Delta\tilde{h}_d(f_n)
+    \end{align*}
+    Here $\tilde{h}_d(f_n)=\tilde{h}_n$ is the discrete Fourier transform (DFT).
+\end{definition}
+So the matrix $[\operatorname{DFT}]_{mn}=e^{-2\pi imn/N}$ defines the discrete Fourier transform for $h=\{h_m\}$ as we have $\tilde{h}_d=[\operatorname{DFT}]h$.
+The inverse of this matrix is its adjoint, i.e. $[\operatorname{DFT}]^{-1}=N^{-1}[\operatorname{DFT}]^\dagger$ and it is built from the $N^{th}$ roots of unity.
+\begin{example}
+    If $N=4$ and $\omega=-i$, then
+    $$[\operatorname{DFT}]=\begin{pmatrix}
+        1&1&1&1\\
+        1&-i&-1&i\\
+        1&-1&1&-1\\
+        1&i&-1&-i
+    \end{pmatrix}$$
+\end{example}
+The inverse DFT is
+\begin{align*}
+    h_m&=h(t_m)\approx\frac{1}{2\pi}\int_{-\infty}^\infty\tilde{h}(\omega)e^{i\omega t_m}\,\mathrm d\omega=\int_{-\infty}^\infty\tilde{h}(f)e^{2\pi ift_m}\,\mathrm df\\
+    &\approx\frac{1}{N\Delta}\sum_{n=0}^{N-1}\Delta\tilde{h}_d(f_n)e^{2\pi imn/N}\\
+    &=\frac{1}{N}\sum_{n=0}^{N-1}\tilde{h}_ne^{2\pi imn/N}
+\end{align*}
+In this frame, we can establish analogues of Parseval's theorem
+$$\sum_{m=0}^{N-1}|h_m|^2=\frac{1}{N}\sum_{n=0}^{N-1}|\tilde{h}_n|^2$$
+and convolution theorem
+$$c_k=\sum_{m=0}^{N-1}g_mh_{k-m}\iff \tilde{c}_k=\tilde{g}_k\tilde{h}_k$$
+This looks complicated, but there is actually a very efficient algorithm to do it, known as fast Fourier transform (FFT), by exploiting the symmetries of the expression.

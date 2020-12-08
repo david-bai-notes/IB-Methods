@@ -1,0 +1,98 @@
+\section{The Dirac Delta Function}
+\subsection{Definition}
+We want to define a generalised function $\delta(x-\xi)$ with the following properties:
+$$\forall x\neq\xi,\delta(x-\xi)=0,\int_{-\infty}^\infty\delta(x-\xi)\,\mathrm dx=1$$
+So $\delta(x-\xi)$ can be thought as a ``function'' with an infinite spike at $x=\xi$.
+Of course, it would be ridiculous to use it really as a function.
+Almost always, we use it in conjunction with an integral, so we can take it as a linear operator having the property that
+$$\left( \int_{-\infty}^\infty\mathrm dx\,\delta(x-\xi) \right)f(x)=\int_{-\infty}^\infty\delta(x-\xi)f(x)\,\mathrm=f(\xi)$$
+\begin{note}
+    The $\delta$ function is some sort of ``generalised function'', or ``distribution'' which admits rigorous mathematical formulation.
+    However, this will not be discussed here.
+\end{note}
+We want the $\delta$ function to represent a unit point source or an impulse in physical situations.
+Loosely, we can take $\delta$ as the ``limit'' of a family of well-defined functions.
+For example, we can consider
+$$\delta_\epsilon(x)=\frac{1}{\epsilon\sqrt{\pi}}\exp\left( -\frac{x^2}{\epsilon^2} \right)$$
+So we can interpret $\delta$ as saying
+$$\int_{-\infty}^\infty\delta(x)f(x)\,\mathrm dx=\lim_{\epsilon\to 0}\int_{-\infty}^\infty\delta_\epsilon(x)f(x)\,\mathrm dx=f(0)$$
+which, as one can verify, works for sufficiently nice $f$.
+This is known as the Gaussian approximation.
+There are some other (discrete) choices of $\delta$ too, for example,
+$$\delta_n(x)=\frac{n}{2}1_{|x|\le 1/n},\delta_n(x)=\frac{\sin(nx)}{\pi x}=\frac{1}{2\pi}\int_{-n}^ne^{ikx}\,\mathrm dk,\delta_n(x)=\frac{n}{2}\operatorname{sech}^2(nx)$$
+\subsection{Properties}
+We interpret the integral of $\delta$ to be the Heaviside function
+$$H(x)=\begin{cases}
+    1\text{, for $x\ge 0$}\\
+    0\text{, for $x<0$}
+\end{cases}=\int_{-\infty}^x\delta(t)\,\mathrm dt$$
+One can verify that the integral of $\delta_n(x)=n\operatorname{sech}^2(x)/2$, that is $(\tanh(nx)+1)/2$, tends to $H(x)$ as $n\to\infty$.\\
+We are gonna do something more sacrilegeous, that would be
+$$\int_{-\infty}^\infty\delta^\prime(x-\xi)f(x)\,\mathrm dx=-\int_{-\infty}^\infty\delta(x-\xi)f^\prime(x)\,\mathrm dx=-f^\prime(\xi)$$
+for a sufficiently nice $f$.
+\footnote{And a sufficiently nice crowd of students who does not have access to life-threatening weapons. Cure yourself by checking out some rigorous theories formulated by Dirac, Schwartz and Temple.}
+\begin{example}
+    For the Gaussian approximation,
+    $$\delta_\epsilon^\prime(x)=-\frac{2x}{\epsilon^3\sqrt{\pi}}e^{-x^2/\epsilon^2}$$
+    which one can plot and have an idea of what the heck is going on with $\delta^\prime$.
+\end{example}
+Also, we have the sampling property
+$$\int_a^bf(x)\delta(x-\xi)\,\mathrm dx=\begin{cases}
+    f(\xi)\text{, for $\xi\in(a,b)$}\\
+    0\text{, otherwise}
+\end{cases}$$
+Also $\delta$ is even and $\delta^\prime$ is odd.
+In addition we have the scaling property
+$$\int_{-\infty}^\infty f(x)\delta(a(x-\xi))\,\mathrm dx=\frac{1}{|a|}f(\xi)$$
+and its advanced version:
+If $g$ has $n$ isolated zeros as $x_1,\ldots,x_n$ with $g^\prime(x_i)\neq 0$ for all $i$, then
+$$\delta(g(x))=\sum_{i=1}^n\frac{\delta(x-x_i)}{|g^\prime(x_i)|}$$
+\begin{example}
+    Take $g(x)=x^2-1$, then
+    \begin{align*}
+        \int_{-\infty}^\infty f(x)\delta(x^2-1)\,\mathrm dx&=\int_{1-\epsilon}^{1+\epsilon}\frac{f(x)}{2|x|}\delta(x-1)\,\mathrm dx+\int_{-1-\epsilon}^{-1+\epsilon}\frac{f(x)}{|2x|}\delta(x+1)\\
+        &=\frac{f(1)+f(-1)}{2}
+    \end{align*}
+\end{example}
+There is also this isolation property: $g(x)\delta(x)=g(0)\delta(x)$ given that $g$ is continuous at $0$.
+\begin{example}
+    We have
+    $$\int_0^\infty\delta^\prime(x^2-1)x^2\,\mathrm dx=-\frac{1}{4}$$
+\end{example}
+\subsection{Eigenfunction Expansions}
+For $-L\le x<L$, if we want to represent
+$$\delta(x)=\sum_{n\in\mathbb Z}c_ne^{in\pi x/L}$$
+Then the coefficients are
+$$c_n=\frac{1}{2L}\int_{-L}^L\delta(x)e^{-in\pi x/L}\,\mathrm dx=\frac{1}{L}\implies \delta(x)=\frac{1}{2L}\sum_{n\in\mathbb Z}e^{in\pi x/L}$$
+We obvious want to check that it has compatible properties.
+Indeed, if $f(x)=\sum_{n\in\mathbb Z}d_ne^{in\pi x/L}$ on $[-L,L)$, then
+\begin{align*}
+    \langle f,\delta\rangle&=\int_{-L}^Lf^*(x)\delta(x)\,\mathrm dx\\
+    &=\frac{1}{2L}\sum_{n\in\mathbb Z}d_n\int_{-L}^Le^{-in\pi x/L}e^{in\pi x/L}\,\mathrm dx\\
+    &=\sum_{n\in\mathbb Z}d_n\\
+    &=f(0)
+\end{align*}
+Note that we only defined $\delta$ on $[-L,L)$, so we can use the Fourier series to extend it periodically to the whole real line and obtain what is called a Dirac comb:
+$$\sum_{m\in\mathbb Z}\delta(x-2mL)=\sum_{n\in\mathbb Z}e^{in\pi x/L}$$
+For general eigenfunctions $\{y_n\}$, suppose we have
+$$\delta(x-\xi)=\sum_{n=1}^\infty a_ny_n(x)$$
+for $x,\xi\in [a,b]$, then the coefficients are
+\begin{align*}
+    a_n&=\left. \int_a^bw(x)y_n(x)\delta(x-\xi)\,\mathrm dx \middle/ \int_a^bwy_n^2\,\mathrm dx\right.\\
+    &=\left. w(\xi)y_n(\xi) \middle/ \int_a^bwy_n^2\,\mathrm dx\right.=w(\xi)Y_n(\xi)
+\end{align*}
+where $Y_n$ is the normalised eigenfunctions.
+So
+$$\delta(x-\xi)=w(\xi)\sum_{n=1}^\infty Y_n(\xi)Y_n(x)=w(x)\sum_{n=1}^\infty Y_n(\xi)Y_n(x)$$
+since, by the isolation property, $w(x)\delta(x-\xi)/w(\xi)=\delta(x-\xi)$.
+In other words,
+$$\delta(x-\xi)=w(x)\int_{n=1}^\infty\frac{y_n(\xi)y_n(x)}{N_n},N_n=\int_a^bwy_n^2\,\mathrm dx$$
+\begin{example}
+    Consider the Fourier sine series with $y(0)=y(1)=0$ and $y_n(x)=\sin n\pi x$, then we have
+    $$\delta(x-\xi)=2\sum_{n=1}^\infty\sin(n\pi\xi)\sin(x\pi x)$$
+    for $\xi\in (0,1)$.
+    Integrate both sides over $[0,1]$ with $\xi=1/2$ gives
+    $$\frac{\pi}{4}=\sum_{n=1}^\infty\frac{(-1)^{m+1}}{2m-1}$$
+\end{example}
+Another interesting observation to make is that if we integrate the series in previous example twice, we obtained a Green's function we've seen before:
+$$G(x,\xi)=2\sum_{n=1}^\infty\frac{\sin(n\pi x)\sin(n\pi\xi)}{(n\pi)^2}$$

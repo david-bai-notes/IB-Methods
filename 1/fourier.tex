@@ -1,0 +1,268 @@
+\section{Fourier Series}
+\subsection{Periodic Functions}
+\begin{definition}
+    A function $f$ is periodic with period $T$ is $f(x+T)=f(x)$ for any $x$.
+\end{definition}
+\begin{example}
+    The physical quantities in a simple harmonic motion are periodic in time $t$.
+    For example, if we take a simple pendulum, then the height of the pendulum bulb can be described
+    \footnote{Approximated.}
+    by $y=A\sin(\omega t)$, so $y$ is periodic (in $t$) with period $T=2\pi/\omega$.
+    So it has angular frequency $\omega$ and frequency $f=1/T$.\\
+    In space, the wavelength is $\lambda=2\pi/k$ and the (angular) wavenumber is $k=2\pi/\lambda$.
+\end{example}
+Consider the set of functions $g_n(x)=\cos(n\pi x/L)$ and $h_n(x)=\sin(n\pi x/L)$ where $n$ is taken as positive integer.
+They are obviously all periodic with period $2L$.
+\begin{definition}
+    For (sufficiently nice) $f,g:[0,2L)\to\mathbb R$, we define their inner product to be
+    $$\langle f,g\rangle =\int_0^{2L}f(x)g(x)\,\mathrm dx$$
+\end{definition}
+\begin{proposition}
+    The functions $g_n,h_n$ are mutually orthogonal on the inteval $[0,2L]$ with respect to the inner product above.
+\end{proposition}
+\begin{proof}
+    Recall the identites we learnt half an eternity ago:
+    \begin{align*}
+        \cos A\cos B&=\frac{\cos(A-B)+\cos(A+B)}{2}\\
+        \sin A\sin B&=\frac{\cos(A-B)-\cos(A+B)}{2}\\
+        \sin A\cos B&=\frac{\sin(A-B)+\sin(A+B)}{2}
+    \end{align*}
+    We can obtain, by simply integrating, that $\langle h_n,g_m\rangle=0$ for any $m,n$.
+    Similarly, for any $m\neq n$, $\langle h_n,h_m\rangle=\langle g_n,g_m\rangle=0$.
+    So they are orthogonal.
+\end{proof}
+What if $m=n$?
+By integrating again, we can get
+$$\langle g_n,g_n\rangle=\begin{cases}
+    L\text{, if $n\neq 0$}\\
+    2L\text{, if $n=0$}
+\end{cases},\langle h_n,h_n\rangle=\begin{cases}
+    L\text{, if $n\neq 0$}\\
+    0\text{, if $n=0$}
+\end{cases}$$
+This shows that $g_n$ and $h_n$ form a linearly independent set.
+We decree that this set actually ``spans'' the space of ``well-behaved'' periodic functions with period $2L$.
+We will get to the intuitive reason why we make such an assertion (and what does it actually mean) in a moment.\\
+In finite dimensional vector spaces like $\mathbb R^3$, we have the standard basis which forms a orthonormal basis.
+We can make the analogy to the space of nice enough functions mentioned above so that we can say this set of trigonometric functions form a ``basis'' there given that we can indeed represent every (nice) function with a (possibly infinite) series of linear combinations of $f_n,g_n$.
+\footnote{As you expect, something not rigourous shall start to happen.}
+\subsection{Definition of a Fourier Series}
+We assert that we can represent any ``well-behaved'' periodic functions $f$ with period $2L$ in the form
+$$\frac{1}{2}a_0+\sum_{n=1}^\infty a_n\cos\frac{n\pi x}{L}+\sum_{n=1}^\infty b_n\sin\frac{n\pi x}{L}$$
+We sure will want this series to converge to $f$ wherever $f$ is continuous.
+As a jump discontinuity, we would want this series to converge to the average value of the upper and lower limits of $f$ at that point.\\
+If these conditions are satisfied and we are allowed to exchange limiting operations, previous discussions then yield
+$$\langle h_n,f\rangle=Lb_n\implies b_n=\frac{1}{L}\langle h_n,f\rangle=\frac{1}{L}\int_0^{2L}f(x)\sin\frac{n\pi x}{L}\,\mathrm dx$$
+Similarly, for any $n$ we have
+$$a_n=\frac{1}{L}\langle g_n,f\rangle=\frac{1}{L}\int_0^{2L}f(x)\cos\frac{n\pi x}{L}\,\mathrm dx$$
+\begin{note}
+    1. The coefficient $1/2$ in front of $a_0$ helped here as it makes the above formula work for $n=0$ too.
+    Actually $a_0/2$ is the average value of $f$ over the interval $[0,2L)$.\\
+    2. The range of integration actually does not matter much as long as its length is $2L$.
+    E.g. we can replace it by $[-L,L)$ as well.\\
+    3. We can think of the Fourier series of a function as decomposing the function into harmonics.
+\end{note}
+\begin{example}[Sawtooth wave]
+    Consider a $2L$-periodic function where $f(x)=x$ for $x\in [-L,L)$.
+    Then obviously $a_n=0$ for any $n$ as $f$ is odd.
+    Whereas integration by part reveals that $b_n=2L(-1)^{n+1}/(n\pi)$.
+    So the Fourier series has the form
+    $$2L\sum_{n=1}^\infty\frac{(-1)^{n+1}}{n\pi}\sin\frac{n\pi x}{L}$$
+    We know this is (slowly) convergent by the alternating series test.
+    A plot of the truncated series seems to show that it does converge to what we want.
+\end{example}
+\begin{note}
+    In the above example, as $n\to\infty$, the Fourier series approximation improves and convergent where the original function is continuous.
+    Also, at the discontinuity, it does converge to the average value of the limits from two sides.
+    So this particular Fourier series behaves as advertised.\\
+    One should also observe that this Fourier series has a persistent ``overshoot'' near the discontinuity which is approximately $9\%$.
+    This is known as the Gibbs' Phenomenon.
+\end{note}
+\subsection{The Dirichlet Conditions and Fourier's Theorem}
+A natural question is then which functions are allowed to have a proper Fourier series.
+Surprisingly, a big, yet hard to precisely characterise, class of functions has a convergent Fourier series that has the desired properties.
+This class even includes some classical counterexamples in analysis.
+As an applied course, we will just look at some of the sufficient conditions.
+\begin{theorem}[Fourier's Theorem]
+    If $f$ is a bounded periodic function with period $2L$ with a finite number of minima, maxima, and discontinuities in $[0,2L)$, then its Fourier series converges to $f$ where it is continuous and converges to the average of the two side limits.
+\end{theorem}
+The conditions in this theorem is known as the Dirichlet conditions.
+\begin{note}
+    1. These conditions are hella weak compared to our conditions for a function to have e.g. a Taylor series.
+    However, pathological functions like $1/x,\sin(1/x),1_{\mathbb R\setminus\mathbb Q}(x)$ are excluded from these conditions.\\
+    2. The converse is not true, as $\sin(1/x)$ has a Fourier series we desire.
+\end{note}
+\begin{proof}
+    You don't really expect to see an actual proof here, do you?
+\end{proof}
+Another subject of interest is the rate of convergence of a Fourier series.
+Perhaps unsurprisingly, it depends on the smoothness of the function.
+\begin{theorem}
+    If $f(x)$ is $p^{th}$ differentiable but $f^{(p)}$ is not continuous, then its Fourier series converges as $O(n^{-(p+1)})$ as $n\to\infty$.
+\end{theorem}
+\begin{proof}
+    Ditto.
+\end{proof}
+\begin{example}
+    1. Consider the square wave
+    $$f(x)=\begin{cases}
+        1\text{, for $0\le x<1$}\\
+        -1\text{, for $-1\le x<0$}
+    \end{cases}$$
+    That extends periodically with period $2$.
+    Then it has a Fourier series
+    $$4\sum_{m=1}^\infty\frac{\sin[(2m-1)\pi x]}{(2m-1)\pi}$$
+    which, as one can see both from the preceding theorem (with $p=0$) and observation, converges slowly.\\
+    2. Consider the general ``see-saw'' wave
+    $$f(x)=\begin{cases}
+        x(1-\xi)\text{, for $x\in[0,\xi)$}\\
+        \xi(1-x)\text{, for $x\in[\xi,1)$}
+    \end{cases}$$
+    which extends as an odd periodic function with period $2$.
+    This has Fourier series
+    $$2\sum_{m=1}^\infty\frac{\sin (n\pi\xi)\sin (n\pi x)}{(n\pi)^2}$$
+    which converges with $p=1$ in the preceding theorem.
+    In particular, $\xi=1/2$ gives
+    $$2\sum_{m=1}^\infty(-1)^{m+1}\frac{\sin[(2m-1)\pi x]}{[(2m-1)\pi]^2}$$
+    which can be seen, immediately, that it converges faster than the series in the previous example.\\
+    3. Take $f(x)=x(1-x)/2$ for $x\in[0,1)$ that extends as an odd periodic function with period $2$.
+    Then its Fourier series is
+    $$4\sum_{m=1}^\infty\frac{\sin[(2m-1)\pi x]}{[(2m-1)\pi]^3}$$
+    which has $p=2$.\\
+    4. Take $f(x)=(1-x^2)^2$, then $a_n=O(n^{-4})$.
+\end{example}
+Of course, we want to integrate and differentiate a Fourier series term-by-term.
+Integration, as one expect, seldom yields problems as it imposed very few restrictions on the function.
+And indeed, we are just going to assume we can integrate any Fourier series term-by-term and they guarantee to yield a smoother function, which satisfies the Dirichlet conditions if the original function does.\\
+Differentiation is more problematic when doing it term-by-term.
+\begin{example}
+    Take the square wave again which is known to have Fourier series
+    $$4\sum_{m=1}^\infty\frac{\sin[(2m-1)\pi x]}{(2m-1)\pi}$$
+    which, after term-by-term differentiation, yields
+    $$4\sum_{m=1}^\infty\cos[(2m-1)\pi x]$$
+    which is clearly divergent.
+    This is perhaps unsurprising as the original function is not even continuous.
+\end{example}
+\begin{theorem}
+    If $f(x)$ is differentiable and both $f,f^\prime$ satisfy Dirichlet conditions, then we can differentiate the Fourier series of $f$ term-by-term to get the Fourier series of $f^\prime$.
+\end{theorem}
+\begin{proof}
+    Haha.
+\end{proof}
+\begin{example}
+    If we differentiate the see-saw curve with $\xi=1/2$, then we will get an offset of the Fourier series of the square wave.
+\end{example}
+\subsection{Parseval's Theorem}
+There is some interesting relation between the integral of the square of a function and the square of the Fourier coefficients of that function.
+If the function is nice enough to have a nice enough Fourier series, then by orthogonality,
+\begin{align*}
+    \int_0^{2L}f(x)^2\,\mathrm dx&=\int_0^{2L}\left( \frac{a_0}{2}+\sum_{n\ge 1}a_n\cos\frac{n\pi x}{2}+\sum_{n\ge 1}b_n\sin\frac{n\pi x}{2} \right)^2\,\mathrm dx\\
+    &=\int_0^{2L}\left( \frac{a_0^2}{4}+\sum_{n\ge 1}a_n^2\cos^2\frac{n\pi x}{2}+\sum_{n\ge 1}b_n^2\sin^2\frac{n\pi x}{2} \right)\,\mathrm dx\\
+    &=L\left( \frac{a_0^2}{2}+\sum_{n\ge 1}(a_n^2+b_n^2) \right)
+\end{align*}
+This is also called the completeness relation as the left hand side would be greater than or equal to the right hand side if any basis functions are missing from the series.
+This is known as Parseval's Theorem.
+\begin{theorem}[Parseval's Theorem]\label{parseval}
+    For a nice enough function $f$ with Fourier coefficients $a_n,b_n$, we have
+    $$\int_0^{2L}f(x)^2\,\mathrm dx=L\left( \frac{a_0^2}{2}+\sum_{n\ge 1}(a_n^2+b_n^2) \right)$$
+\end{theorem}
+\begin{proof}
+    Above.
+\end{proof}
+\begin{example}
+    Consider the sawtooth curve with $f(x)=x,x\in[-L,L)$ with period $2L$.
+    Then Parseval's Theorem reveals that
+    $$\frac{2}{3}L^3=\int_{-L}^Lx^2\,\mathrm dx=L\sum_{n=1}^\infty\frac{4L^2}{n^2\pi^2}=\frac{4L^3}{\pi^2}\sum_{n=1}^\infty\frac{1}{n^2}\implies \sum_{n=1}^\infty\frac{1}{n^2}=\frac{\pi^2}{6}$$
+\end{example}
+\begin{remark}
+    If we think of the integral of the square as the inner product of a function with itself, then Parseval's Theorem can be thought of an analog of Pythagoras' Theorem in this space of functions.
+\end{remark}
+\subsection{Alternative Fourier Series}
+Consider a function $f:[0,L)\to\mathbb R$.
+We can extend $f$ to a periodic function of period $2L$ in two ways:\\
+1. We can require the function to be odd, then $a_n=0$ for all $n$ and
+$$b_n=\frac{2}{L}\int_0^Lf(x)\sin\frac{n\pi x}{L}\,\mathrm dx$$
+and the Fourier series would be $\sum_{n\ge 1}b_n\sin(n\pi x/L)$, which is called a Fourier sine series.
+The sawtooth function is an example of this.\\
+2. We can require the function to be even, then $b_n=0$ for all $n$ and
+$$a_n=\frac{2}{L}\int_0^Lf(x)\cos\frac{n\pi x}{L}\,\mathrm dx$$
+So the Fourier series is $a_0/2+\sum_{n\ge 1}a_n\cos(n\pi x/L)$.
+This is called a Fourier cosine series.
+$f(x)=(1-x^2)^2$ is an example (where $L=1$).\\
+The actual thing we want is tp represent the Fourier series more neatly in terms of exponentials.
+We know that
+$$\cos\frac{n\pi x}{L}=\frac{e^{in\pi x/L}+e^{-in\pi x/L}}{2},\sin\frac{n\pi x}{L}=\frac{e^{in\pi x/L}-e^{-in\pi x/L}}{2i}$$
+So by writing $c_0=a_0/2$ and
+$$c_m=\begin{cases}
+    (a_m-ib_m)/2\text{, for $m>0$}\\
+    (a_{-m}+ib_{-m})/2\text{, for $m<0$}
+\end{cases}$$
+We obtain
+$$\frac{a_0}{2}+\sum_{n=1}^\infty a_n\cos\frac{n\pi x}{L}+\sum_{n=1}^\infty b_n\sin\frac{n\pi x}{L}=\sum_{m=-\infty}^\infty c_me^{im\pi x/L}$$
+Equivalently, if we extend our inner product to the complex functions
+$$\langle f,g\rangle=\int_{-L}^Lf(x)g^*(x)\,\mathrm dx$$
+Then $\langle e^{im\pi x/L},e^{in\pi x/L}\rangle=2L\delta_{mn}$, which means they are orthogonal as well and we can then obtain
+$$c_m=\frac{1}{2L}\langle f(x),e^{im\pi x/L}\rangle=\frac{1}{2L}\int_{-L}^Lf(x)e^{-im\pi x/L}\,\mathrm dx$$
+By thinking them as a set of basis of a space of nice-enough functions in the way we did for $\sin$ and $\cos$.
+Parseval's Theorem can then be stated as
+$$\int_{-L}^Lf(x)^2\,\mathrm dx=2L\sum_{n=-\infty}^\infty|c_n|^2$$
+\subsection{Some Motivations of Fourier Series}
+\begin{definition}
+    The complex inner product $\langle,\rangle:\mathbb C^N\times\mathbb C^N\to\mathbb C$ is defined by
+    $$\langle\underline{u},\underline{v}\rangle=\underline{u}^\dagger\underline{v}$$
+\end{definition}
+An $N\times N$  matrix $A$ is self-adjoint (or Hermitian) if
+$$\forall\underline{u},\underline{v}\in\mathbb C^N,\langle A\underline{u},\underline{v}\rangle=\langle\underline{u},A\underline{v}\rangle$$
+One can show easily that this is just saying $A^\dagger=A$.
+It can be easily shown that $A$ satisfies:\\
+1. All eigenvalues are real for all $n$.\\
+2. Eigenvectors associated with different eigenvalues are orthogonal with respect to $\langle,\rangle$.\\
+Spectral Theorem then shows that we have an orthonormal basis of $\mathbb C^N$ consisting of eigenvectors $\{\underline{v}_1,\ldots,\underline{v}_N\}$.\\
+Now, given any $\underline{b}$, if we want to solve for $\underline{x}$ in $A\underline{x}=\underline{b}$, then a way to do it is to express $\underline{b}=\sum_nb_n\underline{v}_n$ and observe that if $\sum_nc_n\underline{v}_n$ is a solution then
+$$\sum_nb_n\underline{v}_n=A\left(\sum_{n=1}^Nc_n\underline{v}_n\right)=\sum_{n=1}^Nc_n\lambda_n\underline{v}_n$$
+where $\lambda_n$ is the eigenvalue associated with $\underline{v}_n$.
+So if $A$ is nonsingular, then none of the $\lambda_n$ is zero and we can write $c_n=b_n/\lambda_n$ and get the solution
+$$\underline{x}=\sum_{n=1}^N\frac{b_n}{\lambda_n}\underline{v}_n$$
+This means we can easily solve an linear equation if there is a basis consisting of eigenvectors of the matrix.
+We want an analogy of this in solving linear ODEs.
+Consider the differential operator
+$$\mathcal Ly=-\frac{\mathrm d^2y}{\mathrm dx^2}$$
+and suppose we want to solve $\mathcal Ly=f(x)$ for a function $f(x)$ subject to boundary conditions $y(0)=y(L)=0$.
+The related eigenvalue problem is then $\mathcal L y_n=\lambda_ny_n$ with $y_n(0)=y_n(L)=0$ which has solutions
+$$y_n(x)=\sin\frac{n\pi x}{L},\lambda_n=\left( \frac{n\pi}{L} \right)^2$$
+So we will want to write
+$$y(x)=\sum_{n=1}^\infty c_n\sin\frac{n\pi x}{L},f(x)=\sum_{n=1}^\infty b_n\sin\frac{n\pi x}{L},b_n=\frac{2}{L}\int_0^Lf(x)\sin\frac{n\pi x}{L}\,\mathrm dx$$
+and ignore every convergence problem.
+Then this substitution yields
+$$\sum_{n=1}^\infty b_n\sin\frac{n\pi x}{L}=\mathcal Ly=-\frac{\mathrm d^2y}{\mathrm dx^2}\left( \sum_{n=1}^\infty c_n\sin\frac{n\pi x}{L} \right)=\sum_{n=1}^\infty c_n\left( \frac{n\pi}{L} \right)^2\sin\frac{n\pi x}{L}$$
+Hence, $c_n=b_n(L/(n\pi))^2$ by orthogonality, so we can get a particular solution of the problem in the form
+$$y(x)=\sum_{n=1}^\infty \frac{b_n}{\lambda_n}y_n$$
+which is the analogy we wanted.
+\begin{example}\label{odd_sq_fourier_ode}
+    Let $L=1$ and set $f$ to be the odd square wave with $f(x)=1$ for $x\in[0,1)$.
+    This has Fourier series
+    $$4\sum_{m=1}^\infty\frac{\sin[(2m-1)\pi x]}{(2m-1)\pi}$$
+    So the above discussion instantly yield a solution
+    $$y(x)=\sum_{n=1}^\infty \frac{b_n}{\lambda_n}y_n=4\sum_{m=1}^\infty\frac{\sin[(2m-1)\pi x]}{[(2m-1)\pi]^3}$$
+    which is the Fourier series of $y(x)=x(1-x)/2$ on $[0,1)$ extending as an odd periodic function with period $2$.\\
+    Indeed, as one can verifty, if we integrate $\mathcal y=1$ directly with the appropriate boundary conditions, we can get basically the same solution.
+\end{example}
+\subsection{A Glimpse into Green's Functions}
+Fix $L=1$ and consider an odd function $f$.
+We have
+\begin{align*}
+    y(x)&=\sum_{n=1}^\infty\frac{b_n}{\lambda_n}\sin(\pi x)\\
+    &=\sum_{n=1}^\infty\frac{2}{(n\pi)^2}\left(\int_0^1f(\xi)\sin(n\pi\xi)\,\mathrm d\xi\right)\sin(n\pi x)\\
+    &=\int_0^12\sum_{n=1}^\infty\frac{\sin(n\pi x)\sin(n\pi\xi)}{(n\pi)^2}f(\xi)\,\mathrm d\xi\\
+    &=\int_0^1G(x,\xi)f(\xi)\,\mathrm d\xi
+\end{align*}
+where
+$$G(x,\xi)=2\sum_{n=1}^\infty\frac{\sin(n\pi x)\sin(n\pi\xi)}{(n\pi)^2}$$
+But we have seen $G$ before!
+It is exactly the general see-saw wave
+$$G(x,\xi)=\begin{cases}
+    x(1-\xi)\text{, for $x\in[0,\xi)$}\\
+    \xi(1-x)\text{, for $x\in[\xi,1)$}
+\end{cases}$$
+This is the Green's function for this ODE $\mathcal Ly=f$.
+One can actually solve this integral and get what we got in Example \ref{odd_sq_fourier_ode}.

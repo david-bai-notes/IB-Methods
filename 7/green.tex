@@ -1,0 +1,162 @@
+\section{Green's Function}
+\subsection{Physical Motivation}
+Consider the static force on a string which can be caused by gravity acting on the mass of the string.
+Let the tension be $T$ and linear mass density be $\mu$.
+Suppose the string is suspended between fixed ends $y(0)=y(1)=0$.
+The static force is then $-\mu\delta xg$ on the $y$ direction on the piece $\delta x$.
+By resolving forces, we get the equation $-y^{\prime\prime}=f(x)$ where $f(x)=-\mu g/T$.
+We can solve it via direct integration.
+For uniform mass density (i.e. $\mu$ is constant), we have
+$$-y=-\frac{\mu g}{2T}x^2+k_1x+k_2\implies y(x)=\left( -\frac{\mu g}{T} \right)\frac{1}{2}x(1-x)$$
+by the boundary conditions.
+This is a parabolic curve.
+\footnote{You might be expecting the catenary curve instead -- but not really, since in that problem we require the string to be non-elastic (i.e. has a fixed length) which makes it a completely different situation.}
+Another way to solve this problem is to disassemble the force on the string as the sum of infinitesimal parts, and consider their superposition.
+Assume the string is massless but with a point mass $\delta m$ suspended at $x=\xi_i$.
+Obviously the solution is simply two line segments meeting at some points $(\xi_i,y_i)$.
+Suppose the segment closer to $0$ makes an angle $\theta_1$ with the horizontal and the other segment makes an angle $\theta_2$, then resolving in $y$-direction gives
+$$0=T(\sin\theta_1+\sin\theta_2)-\delta mg=T\left( \frac{-y_i}{\xi_i}+\frac{-y_i}{1-\xi_i}-\delta mg \right)$$
+Solving this gives us $y_i=-\delta mg\xi_i(1-\xi_i)/T$.
+So the solution is
+$$y_i(x)=\frac{-\delta mg}{T}\begin{cases}
+    x(1-\xi_i)\text{, for $x<\xi_i$}\\
+    \xi(1-x)\text{., for $x>\xi_i$}
+\end{cases}=f_iG(x,\xi),f_i=\frac{-\delta mg}{T}$$
+where $f_i$ is interpreted as the source $f$ around a infinitesimal neighbourhood of $\xi_i$.
+Now the superposition of the solution for $N$ point masses $\delta m$ at $x=\{\xi_i\}$ gives
+$$y(x)=\sum_{i=1}^Nf_iG(x,\xi_i)$$
+If we take the continuum limit
+$$f_i=-\frac{\delta mg}{T}=-\frac{\mu\delta x g}{T}=f(x)\,\mathrm dx$$
+we have
+$$y(x)=\int_0^1f(\xi)G(x,\xi)\,\mathrm d\xi=\left( -\frac{\mu g}{T} \right)\frac{1}{2}x(1-x)$$
+\subsection{Definitions of Green's Function}
+We wish to solve the inhomogeneous ODE $\mathcal Ly=f(x)$ where $\mathcal L=\alpha y^{\prime\prime}+\beta y^\prime+\gamma y$ on $[a,b]$ subject to boundary conditions $y(a)=y(b)=0$.
+We require $\alpha\neq 0$ over $[a,b]$ and $\alpha,\beta,\gamma$ all continuous and bounded.
+\begin{definition}
+    The Green's function $G$ for the operator $\mathcal L$ is the solution to $\mathcal LG(x,\xi)=\delta(x-\xi)$ subject to homogeneous boundary conditions $G(a,\xi)=G(b,\xi)=0$ for all $\xi$.
+\end{definition}
+So by linearily, if such $G$ does exist, then we have
+$$y(x)=\int_a^bG(x,\xi)f(\xi)\,\mathrm d\xi$$
+Indeed,
+$$\mathcal Ly=\int_a^b\mathcal LG(x,\xi)f(\xi)\,\mathrm d\xi=\int_a^b\delta(x-\xi)f(\xi)\,\mathrm d\xi=f(x)$$
+Loosely speaking, we can write $y=\mathcal L^{-1}f$ where
+$$\mathcal L^{-1}=\int_a^b\mathrm d\xi\, G(x,\xi)$$
+Now, by our established study of these sort of ODEs, the Green's function splits into two smooth enough parts
+$$G(x,\xi)=\begin{cases}
+    G_1(x,\xi)\text{, for $x\in [a,\xi)$}\\
+    G_2(x,\xi)\text{, for $x\in (\xi,b)$}
+\end{cases}$$
+such that the following conditions hold:\\
+1. $\mathcal LG_1=\mathcal LG_2=0$ at any $x\neq\xi$.\\
+2. $G_1(a,\xi)=G_2(b,\xi)=0$ for any $\xi$.\\
+3. $G$ is continuous, so $G_1(\xi,\xi)=G_2(\xi,\xi)$.\\
+4. The jump condition of $G^\prime$, that is
+$$[G^\prime(\cdot,\xi)]^{\xi_+}_{\xi_-}=G_2^\prime(\xi_+,\xi)-G_1^\prime(\xi_-,\xi)=\frac{1}{\alpha(\xi)}$$
+How to construct $G$?
+Note that $\mathcal L$ is a second order differential opertaor, so for $x\in[a,\xi)$, $G_1(x,\xi)=A(\xi)y_1(x)+B(\xi)y_2(x)$ for linearly independent $y_1,y_2$.
+The boundary condition $G_1(a,\xi)=0$ gives $G_1(x,\xi)=C(\xi)y_-(x)$ where $y_-(a)=0$.
+Similarly for $x\in(\xi,b]$ we have $G_2(x,\xi)=D(\xi)y_+(x)$ with $y_+(b)=0$.
+Then continuity condition gives $C(\xi)y_-(\xi)=D(\xi)y_+(\xi)$ and $D(\xi)y_+^\prime(\xi_+)-C(\xi)y_-^\prime(\xi_-)=\alpha(\xi)^{-1}$.
+In other words we have the system
+$$\begin{pmatrix}
+    y_-(\xi)&y_+(\xi)\\
+    -y_-^\prime(\xi_-)&y_+^\prime(\xi_+)
+\end{pmatrix}\begin{pmatrix}
+    C(\xi)\\
+    D(\xi)
+\end{pmatrix}=\begin{pmatrix}
+    0\\
+    1/\alpha(\xi)
+\end{pmatrix}$$
+which has the solution (after extending everything continuously to $x=\xi$)
+$$C(\xi)=\frac{y_+(\xi)}{\alpha(\xi)W(\xi)},D(\xi)=\frac{y_-(\xi)}{\alpha(\xi)W(\xi)}$$
+where $W(\xi)=y_-(\xi)y_+^\prime(\xi)-y_+(\xi)y_-^\prime(\xi)$ is the Wronskian which is nonzero if $y_+,y_-$ are linearly independent.
+So the final Green's function is
+$$G(x,\xi)=\begin{cases}
+    y_-(x)y_+(\xi)/(\alpha(\xi)W(\xi))\text{, for $x\in[a,\xi]$}\\
+    y_+(x)y_-(\xi)/(\alpha(\xi)W(\xi))\text{, for $x\in[\xi,b]$}
+\end{cases}$$
+Therefore the solution to the original boundary value problem $\mathcal Ly=f$ for $y=0$ at $a,b$ is
+\begin{align*}
+    y(x)&=\int_a^bG(x,\xi)f(\xi)\,\mathrm d\xi\\
+    &=\int_a^xG_2(x,\xi)f(\xi)\,\mathrm d\xi+\int_x^bG_1(x,\xi)f(\xi)\,\mathrm d\xi\\
+    &=y_+(x)\int_a^x\frac{y_-(\xi)f(\xi)}{\alpha(\xi)W(\xi)}\,\mathrm d\xi+y_-(x)\int_x^b\frac{y_+(\xi)f(\xi)}{\alpha(\xi)W(\xi)}\,\mathrm d\xi
+\end{align*}
+\begin{note}
+    1. If $\mathcal L$ is in Sturm-Liouville form, then $\beta=\alpha^\prime$, then $\alpha(\xi)W(\xi)$ is a constant and hence $G$ has to be symmetric.\\
+    2. Often we take $\alpha=1$.\\
+    3. The indefinite integrals are the particular integrals in the particular integral in the Sturm-Liouville solution.
+\end{note}
+\begin{example}
+    For $y^{\prime\prime}-y=f(x),y(0)=y(1)=0$, the homogeneous solutions are $y_1=e^x$ and $y_2=e^{-x}$.
+    Imposing the homogeneous boundary conditions reveals that $y_-(x)=\sinh(x)$ and $y_+(x)=\sinh(1-x)$.
+    The countinuity condition of $G$ gives $C=D\sinh(1-\xi)/(\sinh\xi)$.
+    The jump condition of $G^\prime$ then gives
+    $$D=-\frac{\sinh\xi}{\sinh 1},C=-\frac{\sinh(1-\xi)}{\sinh 1}$$
+    So
+    $$y(x)=-\frac{\sinh(1-x)}{\sinh 1}\int_0^x\sinh(\xi)f(\xi)\,\mathrm d\xi-\frac{\sinh x}{\sinh 1}\int_x^1\sinh(1-\xi)f(\xi)\,\mathrm d\xi$$
+\end{example}
+For inhomogenous boundary conditions, we simply need to find a solution to $\mathcal Ly_p=0$ satisfying them and solve for $\mathcal Ly_g=f$ under homogeneous boundary conditions by Green's functions.
+Adding them up gives the particular solution $y=y_p+y_g$.
+\begin{example}
+    For $y^{\prime\prime}-y=f(x)$ with $y(0)=0,y(1)=1$, we have the solution $y_p(x)=\sinh x/\sinh 1$ to $y^{\prime\prime}-y=0$ under the same boundary conditions, so the particular solution would be
+    \begin{align*}
+        y(x)&=y_p(x)+y_g(x)\\
+        &=\frac{\sinh x}{\sinh 1}-\frac{\sinh(1-x)}{\sinh 1}\int_0^x\sinh(\xi)f(\xi)\,\mathrm d\xi-\frac{\sinh x}{\sinh 1}\int_x^1\sinh(1-\xi)f(\xi)\,\mathrm d\xi
+    \end{align*}
+\end{example}
+How about high-order ODEs?
+Suppose we have $\mathcal Ly=f(x)$ with the highest order term $\alpha(x)y^{(n)}(x)$ in $\mathcal Ly$ with $\alpha\neq 0$ everywhere, then $\mathcal LG(x,\xi)=\delta(x-\xi)$ has the properties:\\
+1. $G_1,G_2$ are solutions to $\mathcal LG=0$.\\
+2. $G_1,G_2$ satisfy the homogeneous boundary conditions.\\
+3. Continuity condition of $G_1^{(i)}(\xi,\xi)=G_2^{(i)}(\xi,\xi)$ for all $i=1,\ldots,n-2$.\\
+4. Jump condition of $[G^{(n-1)}(\cdot,\xi)]_{\xi_-}^{\xi_+}=G_2^{(n-1)}(\xi_+,\xi)-G_1^{(n-1)}(\xi_-,\xi)=1/\alpha(\xi)$.\\
+We want to take a look at the eigenfunction expansion of $G$.
+Suppose $\mathcal L$ is in Sturm-Liouville form with eigenfunctions $y_n(x)$ with eigenvalues $\lambda_n$.
+We seek an expansion
+$$G(x,xi)\sum_{n=1}^\infty A_n(\xi)y_n(x)$$
+satisfying $\mathcal LG=\delta(x-\xi)$.
+Now suppose such an expansion exists, then
+\begin{align*}
+    \sum_{n=1}^\infty A_n(\xi)\lambda_nw(x)y_n(x)&=\sum_{n=1}^\infty A_n(\xi)\mathcal Ly_n(x)=\mathcal LG\\
+    &=\delta(x-\xi)=w(x)\sum_{n=1}^\infty y_n(\xi)\frac{y_n(x)}{N_n}
+\end{align*}
+where $N_n=\langle y_n,y_n\rangle_w$ is the normalisation constant.
+Consequently $A_n(\xi)=y_n(\xi)/(\lambda_nN_n)$, therefore
+$$G(x,\xi)=\sum_{n=1}^\infty\frac{y_n(\xi)y_n(x)}{\lambda_nN_n}=\sum_{n=1}^\infty\frac{Y_n(\xi)Y_n(x)}{\lambda_n}$$
+\subsection{Construction of Green's Function from Initial Values}
+We want to solve $\mathcal Ly(t)=f(t)$ for $t\ge a$ with $y(a)=y^\prime(a)=0$.
+The Green's function then should satisfy $\mathcal LG=\delta(t-\tau)$ with $G(a)=G^\prime(a)=0$.
+For $t<\tau$, $G=G_1$ satisfies $\mathcal LG_1=0$.
+So $G_1=Ay_1+By_2$ for $A,B$ constants and $y_1,y_2$ linearly independent solutions to $\mathcal Ly=0$.
+The initial conditions then give
+$$\begin{pmatrix}
+    y_1(a)&y_2(a)\\
+    y_1^\prime(a)&y_2^\prime(a)
+\end{pmatrix}\begin{pmatrix}
+    A\\
+    B
+\end{pmatrix}=\begin{pmatrix}
+    0\\
+    0
+\end{pmatrix}$$
+But $y_1,y_2$ are independent, so the Wronskian is nowhere zero, hence nonzero at $a$.
+Therefore necessarily $A=B=0$, so $G_1(t,\tau)=0$ for $a\le t<\tau$.\\
+For $t>\tau$, we have $G=G_2$ for $\mathcal LG_2=0$ and $G_2(\tau,\tau)=0$ by continuity.
+So we can choose solution $y_+$ to $\mathcal Ly=0$ such that $G_2(t,\tau)=D(\tau)y_+(t)$.
+But we must have (extending everything continuously to $\tau$)
+$$\frac{1}{\alpha(\tau)}=G_2^\prime(\tau,\tau)-G_1^\prime(\tau,\tau)$$
+which gives $D(\tau)=1/(\alpha(\tau)y_+^\prime(\tau))$, hence
+$$G(t,\tau)=\begin{cases}
+    0\text{, for $t\le\tau$}\\
+    y_+(t)/(\alpha(\tau)y_+^\prime(\tau))\text{, for $t\ge\tau$}
+\end{cases}$$
+So we get the solution
+$$y(t)=\int_a^tG_2(t,\tau)f(\tau)\,\mathrm d\tau=\int_a^t\frac{y_+(t)f(\tau)}{\alpha(\tau)y_+^\prime(\tau)}\,\mathrm d\tau$$
+which looks simpler as we built in the causality with the initial conditions.
+\begin{example}
+    For $y^{\prime\prime}-y=f(t)$ with $y(0)=y^\prime(0)=0$.
+    We then obtain $G_2(t,\tau)=\sinh(t-\tau)$.
+    Therefore
+    $$y(t)=\int_0^tf(\tau)\sinh(t-\tau)\,\mathrm d\tau$$
+\end{example}

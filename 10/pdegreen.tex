@@ -1,0 +1,143 @@
+\section{Solving PDEs with Green's Functions}
+\subsection{Diffusion Equation and Fourier Transform}
+Recall that the heat equation for a conducting wire is
+$$\frac{\partial\Theta}{\partial t}-D\frac{\partial^2\Theta}{\partial x^2}$$
+with initial condition $\Theta(x,0)=h(x)$ and boundary condition $\Theta\to 0$ as $x\to\pm\infty$.
+Taking Fourier transform wrt $x$ gives
+$$\frac{\partial}{\partial t}\tilde{\Theta}(k,t)=-Dk^2\tilde\Theta(k,t)\implies\tilde\Theta(k,t)=Ce^{-Dk^2t}$$
+for some $C$ that is constant in $t$.
+Initial condition $\tilde{\Theta}(k,0)=\tilde{h}(k)$ gives $\tilde\Theta(k,t)=\tilde{h}(k)e^{-Dk^2t}$.
+Inverting it gives
+\begin{align*}
+    \Theta(x,t)&=\frac{1}{2\pi}\int_{-\infty}^\infty \tilde{h}(k)e^{-Dk^2t}e^{ikx}\,\mathrm dk\\
+    &=\frac{1}{\sqrt{4\pi Dt}}\int_{-\infty}^\infty h(u)\exp\left( -\frac{(x-u)^2}{4Dt} \right)\,\mathrm du\\
+    &=\int_{-\infty}^\infty h(u)S_d(x-u,t)\,\mathrm du
+\end{align*}
+where $S_d(x,t)=(4\pi Dt)^{-1/2}e^{-x^2/(4Dt)}$ is called the fundamental solution (or diffusion kernel/sourse function), which is just the FT of $e^{-Dk^2t}$.
+Note that the case $\Theta(x,0)=\theta_0\delta(x)$ gives our old friend $\Theta=\theta_0(4\pi Dt)^{-1/2}e^{-\eta^2}$ where $\eta=x/(2\sqrt{Dt})$ is the similarity parameter.
+\begin{example}
+    Suppose initially $f(x)=\theta_0\sqrt{a/\pi}e^{-ax^2}$.
+    Then
+    \begin{align*}
+        \Theta&=\frac{\theta_0\sqrt{a}}{\sqrt{4\pi^2Dt}}\int_{-\infty}^\infty\exp\left( -au^2-\frac{(x-u)^2}{4Dt} \right)\,\mathrm du\\
+        &=\frac{\theta_0\sqrt{a}}{\sqrt{4\pi^2Dt}}\int_{-\infty}^\infty\exp\left( -\frac{1+4aDt}{4Dt}\left( u-\frac{x}{1+4aDt} \right)^2 \right)\exp\left( \frac{-ax^2}{1+4aDt} \right)\,\mathrm du\\
+        &=\theta_0\sqrt{\frac{a}{\pi(1+4aDt)}}\exp\left( \frac{-ax^2}{1+4aDt} \right)
+    \end{align*}
+    Asymptotically the width of the Gaussian spreads as $\sqrt{t}$ and the area under the curve being constant (which can be interpreted as the conservation of heat energy).
+\end{example}
+\subsection{Forced Diffusion Equation}
+Consider
+$$\frac{\partial\Theta}{\partial t}(x,t)-D\frac{\partial^2\Theta}{\partial x^2}(x,t)=f(x,t)$$
+with homogeneous initial condition $\Theta(x,0)=0$.
+The Green's function $G$ of this problem would satisfy
+$$\frac{\partial G}{\partial t}-D\frac{\partial^2G}{\partial x^2}=\delta(x-\xi)\delta(t-\tau)$$
+with $G(x,0;\xi,\tau)=0$.
+Take FT wrt $x$ gives
+$$\frac{\partial \tilde{G}}{\partial t}(k,t;\xi,\tau)+Dk^2\tilde{G}(k,t;\xi,\tau)=e^{-ik\xi}\delta(t-\xi)$$
+Multiplying both sides using the integration factor $e^{Dk^2t}$ allows us to integrate the equation and obtain
+$$e^{Dk^2t}\tilde{G}=e^{-ik\xi}\int_0^te^{Dk^2t'}\delta(t'-\tau)\,\mathrm dt'$$
+The appearance of Heaviside function is because we need to ensure that $[0,t]$ contains $\tau$ in order to make use of the property of $\delta$ function.
+Inverting the whole thing gives
+\begin{align*}
+    G(x,t;\xi,\tau)&=\frac{H(t-\tau)}{2\pi}\int_{-\infty}^\infty e^{ik(x-\xi)}e^{-Dk^2(t-\tau)}\,\mathrm dk\\
+    &=\frac{H(t')}{2\pi}\int_{-\infty}^\infty e^{ikx'}e^{-Dk^2t'}\,\mathrm dk,x'=x-\xi,t'=t-\tau\\
+    &=\frac{H(t')}{\sqrt{4\pi Dt'}}e^{-x'^2/(4Dt')}\\
+    &=H(t-\tau)S_d(x-\xi,t-\tau)
+\end{align*}
+where $S_d$ is again our good ol' fundamental solution.
+Therefore the general solution is
+\begin{align*}
+    \Theta(x,t)&=\int_0^\infty\int_{-\infty}^\infty G(x,t;\xi,\tau)f(\xi,\tau)\,\mathrm d\xi\mathrm d\tau\\
+    &=\int_0^t\int_{-\infty}^\infty f(u,\tau)S_d(x-u,t-\tau)\,\mathrm du\mathrm d\tau
+\end{align*}
+which looks very familiar to our previous solution for the homogeneous case with initial conditions at $t=\tau$.
+But this time, the initial condition of $\Theta(u,t)=f(u)$ at $t=\tau$ is replaced by the forcing term $f(u,\tau)$ in the equation, and the effect of this, as we see now, is just integrating the solution over $\tau$.
+This phenomenon is called Duhamel's Principle which relates the solution of forced PDE with homogeneous boundary conditions to solutions of homogeneous PDEs with inhomogenoeus boundary conditions.
+So in this philosophy, the forcing term is acting like an initial conditions for subsequent evolution, and the integral represents a superposition of all these initial-condition-like effects for $0<\tau<t$.
+\subsection{Forced Wave Equation}
+Consider the forced wave equation
+$$\frac{\partial^2\phi}{\partial t^2}-c^2\frac{\partial^2\phi}{\partial x}=f(x,t)$$
+subject to $\phi(x,0)=\phi_t(x,0)=0$.
+The Green's function for this would satisfy
+$$\frac{\partial^2\phi}{\partial t^2}-c^2\frac{\partial^2\phi}{\partial x}=\delta(x-\xi)\delta(t-\tau)$$
+with $G=G_t=0$ at $t=0$.
+Take FT wrt $x$ again,
+$$\frac{\partial^2\tilde{G}}{\partial t^2}+c^2k^2\tilde{G}=e^{-ik\xi}\delta(t-\tau)$$
+Solving it yields
+$$\tilde{G}=\begin{cases}
+    0\text{, if $t<\tau$}\\
+    e^{-ik\xi}\sin(kc(t-\tau))/(kc)\text{, if $t>\tau$}
+\end{cases}=e^{-ik\xi}\frac{\sin(kc(t-\tau))}{kc}$$
+Inverting this gives
+\begin{align*}
+    G(x,t;\xi,\tau)&=\frac{H(t-\tau)}{2\pi c}\int_{-\infty}^\infty e^{ik(x-\xi)}\frac{\sin(kc(t-\tau))}{k}\,\mathrm dk\\
+    &=\frac{H(t-\tau)}{2\pi c}\int_{-\infty}^\infty \frac{\cos(kA)\sin(kB)}{k}\,\mathrm dk,A=x-\xi,B=c(t-\tau)\\
+    &=\frac{H(t-\tau)}{2\pi c}\int_{-\infty}^\infty \frac{\sin(k(A+B))-\sin(k(A-B))}{k}\,\mathrm dk\\
+    &=\frac{H(t-\tau)}{2\pi c}(\operatorname{sgn}(A+B)-\operatorname{sgn}(A-B))\\
+    &=\frac{1}{2c}H(c(t-\tau)-|x-\xi|)
+\end{align*}
+which is also called the causal fundamental solution since it hints the causal structure in $t$.
+The general solution is then
+\begin{align*}
+    \phi(x,t)&=\int_0^\infty\int_{-\infty}^\infty f(\xi,t)G(x,t;\xi,\tau)\,\mathrm d\xi\mathrm d\tau\\
+    &=\frac{1}{2c}\int_0^t\int_{x-c(t-\tau)}^{x+c(t-\tau)}f(\xi,\tau)\,\mathrm d\xi\mathrm d\tau
+\end{align*}
+which, by relating to our previous solution, can also be seen as an example of Dudamel's principle.
+\subsection{Poisson's Equation}
+We want to solve Poisson's equation, which is just a forced Laplace equation $\nabla^2\phi=-\rho$ on a domain $D$ subject to Dirichlet boundary conditions $\phi|_{\partial D}=0$.
+To get its fundamental solution, note that we can get the notion of $\delta$ function on $\mathbb R^3$ analogously.
+So the free space Green's function $G=G_{\rm FS}(\underline{r};\underline{r}')$ is naturally the solution to $\nabla^2G_{\rm FS}(\underline{r};\underline{r}')=\delta(\underline{r}-\underline{r}')$.
+We can take this to be spherically symmetric $G(\underline{r};\underline{r}')=G(|\underline{r}-\underline{r}'|)=G(r)$.
+Let $B$ be the ball with centre $\underline{r}'$ and radius $r$, then we have
+$$1=\int_B\delta(\underline{r}-\underline{r}')\,\mathrm d^3\underline{r}=\int_B\nabla^2G_{\rm FS}\,\mathrm d^3r=\int_{\partial B}\nabla G_{\rm FS}\cdot\underline{n}\,\mathrm dS=4\pi r^2\frac{\partial G_{\rm FS}}{\partial r}$$
+So $G_{\rm FS}=-1/(4\pi r)=-1/(4\pi|\underline{r}-\underline{r}'|)$ because of the boundary condition $G\to 0$ as $r\to\infty$.
+Therefore we get the general solution
+$$\Phi(\underline{r})=\frac{1}{4\pi}\int_D\frac{\rho(\underline{r}')}{|\underline{r}-\underline{r}'|}\,\mathrm d^3\underline{r}'$$
+By the way, we can derive the Green's function in 2D in the similar way and get $G_2(\underline{r};\underline{r}')=-(2\pi)^{-1}\log(|\underline{r}-\underline{r}'|)+C_2$ where $C_2$ is a constant (which we almost always set to $0$).\\
+We now turn to Green's Identities.
+Consider two scalar functions $\phi,\psi$ twice differentiable on $D$.
+Then
+$$\int_D(\phi\nabla^2\psi+\nabla\phi\cdot\nabla\psi)\,\mathrm d^3\underline{r}=\int_D\nabla\cdot(\phi\nabla\psi)\,\mathrm d^3\underline{r}=\int_{\partial D}\phi\nabla\psi\cdot\underline{\hat{n}}\,\mathrm dS$$
+by divergence theorem.
+This is called Green's first identity.
+Now switch $\psi$ and $\phi$ and substract from the first identity to get Green's second identity.
+$$\int_{\partial D}\left( \phi\frac{\partial\psi}{\partial n}-\psi\frac{\partial\phi}{\partial n} \right)\,\mathrm dS=\int_D(\phi\nabla^2\psi-\psi\nabla^2\phi)\,\mathrm d^3\underline{r}$$
+Now excise a small spherical ball $B_\epsilon$ around $\underline{r}'$ with radius $\epsilon$.
+Now if $\phi$ is a solution to $\nabla^2\phi=-\rho$ and $\psi=G_{\rm FS}(\underline{r};\underline{r}')$, then the right hand side is
+$$\int_{D-B_\epsilon}(\phi\nabla^2G_{\rm FS}-G_{\rm FS}\nabla^2\phi)\,\mathrm d^3r=\int_{D-B_\epsilon}G_{\rm FS}\rho\,\mathrm d^3\underline{r}$$
+and the left hand side becomes
+$$\int_{\partial D}\left( \phi\frac{\partial G_{\rm FS}}{\partial n}-G_{\rm FS}\frac{\partial\phi}{\partial n} \right)\,\mathrm dS+\int_{\partial B_\epsilon}\left( \phi\frac{\partial G_{\rm FS}}{\partial n}-G_{\rm FS}\frac{\partial\phi}{\partial n} \right)\,\mathrm dS$$
+Taking $\epsilon\to 0$ gives
+$$\int_{\partial B_\epsilon}\left( \phi\frac{\partial G_{\rm FS}}{\partial n}-G_{\rm FS}\frac{\partial\phi}{\partial n} \right)\,\mathrm dS\to-\phi(\underline{r}')$$
+Therefore we conclude Green's third identity
+$$\phi(\underline{r}')=\int_DG_{\rm FS}(\underline{r};\underline{r}')(-\rho(\underline{r}))\,\mathrm d^3\underline{r}+\int_{\partial D}\left( \phi(\underline{r})\frac{\partial G}{\partial n}(\underline{r};\underline{r}')-G_{\rm FS}(\underline{r};\underline{r}')\frac{\partial\phi}{\partial n}(\underline{r}) \right)\,\mathrm dS$$
+Now we want to solve $\nabla^2\phi=-\rho$ on $D$ subject to inhomogeneous Dirichlet boundary conditions $\phi|_{\partial D}=h$.
+In this case, we want the Green's function $G=G(\underline{r};\underline{r}')$ to satisfy:\\
+(i) $\nabla^2G(\underline{r};\underline{r}')=0$ for any $\underline{r}\neq\underline{r}'$.\\
+(ii) $G(\underline{r};\underline{r}')=0$ on $\partial D$.\\
+(iii) $G(\underline{r},\underline{r}')=G_{\rm FS}(\underline{r};\underline{r}')+H(\underline{r},\underline{r}')$ for some $H$ such that $\nabla^2H=0$ in $D$.\\
+Green's second identity with $\nabla^2\phi=-\rho$ and $\nabla^2H=0$ gives
+$$\int_{\partial D}\left( \phi\frac{\partial H}{\partial n}-H\frac{\partial\phi}{\partial n} \right)\,\mathrm dS=\int_DH\rho\,\mathrm d^3\underline{r}$$
+The Green's third identity simplifies to
+\begin{align*}
+    \phi(\underline{r}')&=\int_D(G-H)(-\rho)\,\mathrm d^3\underline{r}+\int_{\partial D}\left( \phi\frac{\partial (G-H)}{\partial n}-(G-H)\frac{\partial\phi}{\partial n} \right)\,\mathrm dS\\
+    &=\int_DG(\underline{r};\underline{r}')(-\rho(\underline{r}))\,\mathrm d^3\underline{r}+\int_{\partial D}h(\underline{r})\frac{\partial G(\underline{r};\underline{r}')}{\partial n}\,\mathrm dS
+\end{align*}
+So this Green's function does give a way to obtain a particular solution.
+Also $G(\underline{r};\underline{r}')=G(\underline{r};\underline{r}')$ by a simple use of Green's third identity again.\\
+For Neumann boundary conditions with $\partial\phi/\partial n=k(\underline{r})$ on $\partial D$, we can do a similar thing and obtain
+$$\phi(\underline{r}')=\int_DG(\underline{r};\underline{r}')(-\rho(\underline{r}))\,\mathrm d^3\underline{r}+\int_{\partial D}G(\underline{r};\underline{r}')(-k(\underline{r}))\,\mathrm dS$$
+\subsection{Method of Images}
+For symmetric domain $D$ we can construct Green's function with $G=0$ on $\partial D$ by cancelling the boundary potential with an opposite mirror image Green's function placed outside $D$.\\
+Our first target is Laplace's equation on the half-plane $D=\{(x,y,z):z>0\}$ subject to $\phi(x,y,0)=h(x,y)$ and $\phi\to 0$ as $|\underline{r}|\to\infty$.
+Now $G_{\rm FS}(\underline{r};\underline{r}')\to 0$ as $|\underline{r}|\to\infty$, but it is nonzero at $z=0$.
+However, we can take $G(\underline{r};\underline{r}')=G(\underline{r};\underline{r}')-G(\underline{r},\underline{r}'')$ where $\underline{r}''=(x',y',-z')$ which totally works.
+Also at $z=0$, $\partial G/\partial n=\partial G/\partial z=(2\pi)^{-1}z'((x-x')^2+(y-y')^2+z'^2)^{-3/2}$.
+This means that the solution is
+$$\Phi(x',y',z')=\frac{z'}{2\pi}\int_{-\infty}^\infty\int_{-\infty}^\infty((x-x')^2+(y-y')^2+z'^2)^{-3/2}h(x,t)\,\mathrm dx\mathrm dy$$
+We now turn to the wave equation for $x>0$.
+Consider $\ddot{\phi}-c^2\phi^{\prime\prime}=f$ with Dirichlet boundary conditions $\phi(0,t)=0$.
+The same philosophy gives the Green's function
+$$G(x,t;\xi,\tau)=\frac{1}{2c}H(c(t-\tau)-|x-\xi|)-\frac{1}{2c}H(c(t-\tau)-|x+\xi|)$$
+So if $f=0$ and the initial condition is a Gaussian pause, then this solves to
+$$\phi(x,t)=\exp((x-\xi+ct)^2)-\exp((-x-\xi+ct)^2)$$

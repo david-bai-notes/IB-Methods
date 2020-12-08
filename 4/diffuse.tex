@@ -1,0 +1,85 @@
+\section{The Diffusion Equation}
+\subsection{Physical Origin}
+We want to understand physical phenomena that ``diffuses'' due to spatial gradient.
+An early example was Fick's Law $\underline{J}=-D\nabla c$ where $J$ is the flux, $c$ is the concentration and $D$ is the diffusion coefficient.
+For heat flow, we also have Fourier's Law saying $\underline{q}=-k\nabla\Theta$ where $\underline{q}$ is the heat flux, $k$ is the thermal conductivity and $\Theta$ is the temperature.\\
+In a volume $V$, the overall heat energy $Q$ is
+$$Q=\int_V c_V\rho\Theta\,\mathrm dV$$
+where $c_V$ is the specific heat capacity of the matertial of the volume $V$, and $\rho_V$ is the mass density.
+Te rate of change of it would then be, making use of Fourier's law,
+$$\frac{\mathrm dQ}{\mathrm dt}=\int_Vc_V\rho\frac{\partial\Theta}{\partial t}\,\mathrm dV$$
+On the other hand, integrating Fick's Law over $S=\partial V$,
+$$-\frac{\mathrm dQ}{\mathrm dt}=\int_S\underline{q}\cdot\underline{\hat{n}}\,\mathrm dS=\int_S(-k\nabla\Theta)\cdot\underline{\hat{n}}\,\mathrm dS=\int_V(-k\nabla^2\Theta)\,\mathrm dV$$
+by Fourier's Law.
+Therefore,
+$$\int_Vc_V\rho\frac{\partial\Theta}{\partial t}-k\nabla^2\Theta\,\mathrm dV=0$$
+for all volumn $V$.
+So the integrand must vanish everywhere (assuming it is continuous), which gives
+$$\frac{\partial\Theta}{\partial t}-D\nabla^2\Theta=0$$
+where $D=k/(c_V\rho)$.
+This is known as the diffusion equation.\\
+We can also derive this from a more fundamental point of view.
+Consider gas particles diffuse by scattering.
+So for every small time change $\Delta t$ in time a particle moves for a distance $\xi$ with probability (PDF) $p(\xi)$.
+Let $\langle X\rangle$ be the mean of $X$.
+We assume $\langle\xi\rangle=0$.
+Suppose the PDF after $N\Delta t$ steps is $P_{N\Delta t}(x)$, then for $(N+1)\Delta t$ step,
+\begin{align*}
+    P_{(N+1)\Delta t}(x)&=\int_{-\infty}^\infty p(\xi)P_{N\Delta t}(x-\xi)\,\mathrm d\xi\\
+    &\approx \int_{-\infty}^\infty p(\xi)\left(P_{N\Delta t}(x)-\xi P_{N\Delta t}^\prime(x)+\frac{\xi^2}{2}P_{N\Delta t}^{\prime\prime}(x)\right)\,\mathrm d\xi\\
+    &=P_{N\Delta t}(x)+P_{N\Delta t}^{\prime\prime}(x)\frac{\langle\xi^2\rangle}{2}
+\end{align*}
+Identify $P_{N\Delta t}(x)=P(x,N\Delta t)$, then we have
+$$P(x,(N+1)\Delta t)-P(x,N\Delta t)=\frac{\partial^2P}{\partial x^2}(x,N\Delta t)\frac{\langle\xi^2\rangle}{2}$$
+By some probabilistic argument, $\langle\xi^2\rangle\propto\Delta t$, so this gives
+$$\frac{\partial P}{\partial t}=D\frac{\partial^2P}{\partial x^2}$$
+for a constant $D$.
+\subsection{Similarity Solution}
+The characteristic relation between variance and time suggests that we may start seeking a solution in terms of the dimensionless parameter $\eta=x/(2\sqrt{Dt})$.
+That is, we want to find solutions of the form $\Theta(x,t)=\Theta(\eta)$.
+Change variables in this way,
+$$\frac{\partial\Theta}{\partial t}=\frac{\partial\eta}{\partial t}\frac{\mathrm d\Theta}{\mathrm d\eta}=-\frac{1}{2}\frac{x}{\sqrt{D}t^{3/2}}\Theta^\prime=-\frac{\eta}{2t}\Theta^\prime$$
+$$D\frac{\partial^2\Theta}{\partial x^2}=D\frac{\partial}{\partial x}\left(\frac{\partial\eta}{\partial x}\frac{\mathrm d\Theta}{\mathrm d\eta}\right)=D\frac{\partial}{\partial x}\left( \frac{1}{2\sqrt{Dt}}\Theta^\prime \right)=\frac{D}{4Dt}\Theta^{\prime\prime}=\frac{1}{4t}\Theta^{\prime\prime}$$
+Putting them all together gives $\Theta^{\prime\prime}=-2\eta\Theta^\prime$, which gives $\Theta^\prime\propto e^{-\eta^2}$, therefore
+$$\Theta(\eta)=\Theta(0)+\frac{2C}{\sqrt{\pi}}\int_0^\eta e^{-u^2}\,\mathrm du=\Theta(0)+C\operatorname{erf}(\eta)=\Theta(0)+C\operatorname{erf}\left( \frac{x}{2\sqrt{Dt}} \right)$$
+where $C$ is a constant and $\operatorname{erf}$ is the error function defined by
+$$\operatorname{erf}(z)=\frac{2}{\sqrt{\pi}}\int_0^ze^{-u^2}\,\mathrm du$$
+This can describes discontinuous initial conditions (e.g. step functions) that spreads over time.
+\subsection{Heat Conduction in a Finite Bar}
+Suppose we have a bar of length $2L$ at $[-L,L]$ and initial temperature
+$$\Theta(x,0)=H(x)=\begin{cases}
+    1\text{, for $x\in [0,L]$}\\
+    0\text{, for $x\in [-L,0)$}
+\end{cases}$$
+with boundary conditions $\Theta(L,t)=1,\Theta(-L,t)=0$.
+We want to use Sturm-Liouville theory, but there is a problem here:
+Our boundary conditions is not homogeneous.
+So we must make the condition homogeneous by a suitable superposition.
+But there is an obvious choice of this, namely $\Theta_s(x,t)=(x+L)/(2L)$.
+Therefore we with a transformation $\hat\Theta=\Theta-\Theta_s$ the problem becomes
+$$\frac{\partial\hat\Theta}{\partial t}=D\frac{\partial^2\hat\Theta}{\partial x^2},\hat\Theta(-L,t)=\hat\Theta(L,t)=0,\hat\Theta(x,0)=H(x)-\frac{x+L}{2L}$$
+Now we do seperation of variables $\hat\Theta(x,t)=X(x)T(t)$, which gives $X^{\prime\prime}=-\lambda X,\dot{T}=-D\lambda T$ where $\lambda$ is the seperation constant.
+The boundary conditions imply that $\lambda>0$ and
+$$X(x)=A\cos{\sqrt{\lambda}x}+B\sin(\sqrt{\lambda}x)$$
+where $A,B$ are constants.
+The initial condition is odd, so $A=0$ and consequently the eigenvalues are $\lambda_n=(n\pi/L)^2$ for $n=1,2,3,\ldots$, so we obtained the family of solutions
+$$X_n=B_n\sin\frac{n\pi x}{L},\lambda_n=\frac{n^2\pi^2}{L^2},n=1,2,3,\ldots$$
+Put $\lambda_n$ in the temporal equation gives
+$$T_n(t)=C_n\exp\left( -\frac{Dn^2\pi^2}{L^2}t \right)$$
+So
+$$\hat\Theta(x,t)=\sum_{n=1}^\infty b_n\sin\left(\frac{n\pi x}{L}\right)\exp\left( -\frac{Dn^2\pi^2}{L^2}t \right)$$
+Now we impose initial conditions at $t=0$ which gives
+\begin{align*}
+    b_n&=\frac{1}{L}\int_{-L}^L\hat\phi(x,0)\sin\frac{n\pi x}{L}\,\mathrm dx\\
+    &=\frac{2}{L}\int_0^L\hat\phi(x,0)\sin\frac{n\pi x}{L}\,\mathrm dx\\
+    &=\frac{2}{L}\int_0^L\left( H(x)-\frac{x+L}{2L} \right)\sin\frac{n\pi x}{L}\,\mathrm dx\\
+    &=\frac{2}{L}\int_0^L\left( H(x)-\frac{1}{2} \right)\sin\frac{n\pi x}{L}\,\mathrm dx-\frac{2}{L}\int_0^L\frac{x}{2L}\sin\frac{n\pi x}{L}\,\mathrm dx\\
+    &=\begin{cases}
+        2/[(2m-1)\pi]-1/(n\pi)\text{, for $n=2m-1$ odd}\\
+        1/n\pi\text{, for $n$ even}
+    \end{cases}\\
+    &=\frac{1}{n\pi}
+\end{align*}
+Therefore we get the final solution
+$$\Theta(x,t)=\frac{2+L}{2L}+\hat\Theta(x,t)=\frac{x+L}{2L}+\sum_{n=1}^\infty \frac{1}{n\pi}\sin\left(\frac{n\pi x}{L}\right)\exp\left( -\frac{Dn^2\pi^2}{L^2}t \right)$$
+A plot reveals that this solution is very similar to the similarity solution we got earlier especially for small $t$.
